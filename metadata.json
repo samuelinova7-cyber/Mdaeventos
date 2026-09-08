@@ -1,0 +1,6 @@
+{
+  "name": "MDE Eventos - Landing Page & Orçamentos",
+  "description": "Landing Page de alta conversão para MDE Eventos (@mde.eventos), especializada em eventos corporativos, congressos, feiras e encontros empresariais em Alagoas com gerador de orçamentos para WhatsApp.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
