@@ -14,11 +14,11 @@ export const AnimatedRoundLogo: React.FC<AnimatedRoundLogoProps> = ({
   const officialLogoUrl =
     'https://res.cloudinary.com/hd1sahto/image/upload/v1793395580/WhatsApp_Image_2026-10-30_at_4.25.30_PM.jpg';
 
-  // Size mapping (much larger than standard)
+  // Responsive size mapping (larger and round with aura)
   const sizeClasses = {
     md: 'w-14 h-14 sm:w-16 sm:h-16',
-    lg: 'w-16 h-16 sm:w-20 sm:h-20',
-    xl: 'w-24 h-24 sm:w-28 sm:h-28',
+    lg: 'w-14 h-14 sm:w-18 sm:h-18 lg:w-20 lg:h-20',
+    xl: 'w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28',
   };
 
   return (

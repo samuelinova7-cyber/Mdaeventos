@@ -9,17 +9,15 @@ import {
   Sparkles,
   Ticket,
   ChevronRight,
-  Shield,
-  Clock,
   Presentation,
   UserCheck,
   Target,
-  Layers,
 } from 'lucide-react';
 import { SERVICES_DATA, DETAILED_SERVICES_PILLARS, COMPANY_OBJECTIVES } from '../data/content';
 import { ServiceItem } from '../types';
 import { ServiceDetailModal } from './ServiceDetailModal';
 import { playButtonClick, playCoinSound } from '../utils/audio';
+import { useLanguage } from '../context/LanguageContext';
 
 interface ServicesSectionProps {
   onSelectServiceForBudget: (serviceTitle: string) => void;
@@ -31,8 +29,10 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
   whatsappPhone,
 }) => {
   const [selectedService, setSelectedService] = useState<ServiceItem | null>(null);
+  const { t, language } = useLanguage();
 
-  const solutionsVideoUrl = 'https://res.cloudinary.com/hd1sahto/video/upload/v1793395558/SnapInsta.to_AQMolBwcWqHhav1abOiBqy1jNveYqcd6T5SM-wwppRqawo6poREewVpNoMkblMtWi_OzhkWBBqYfh7vfsoOL7scpqDl1juobjpGDZjM.mp4';
+  const solutionsVideoUrl =
+    'https://res.cloudinary.com/hd1sahto/video/upload/v1793395558/SnapInsta.to_AQMolBwcWqHhav1abOiBqy1jNveYqcd6T5SM-wwppRqawo6poREewVpNoMkblMtWi_OzhkWBBqYfh7vfsoOL7scpqDl1juobjpGDZjM.mp4';
 
   const getIcon = (iconName: string) => {
     switch (iconName) {
@@ -49,6 +49,34 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
     }
   };
 
+  const getPillarTitle = (pillar: typeof DETAILED_SERVICES_PILLARS[0]) => {
+    if (language === 'en') {
+      if (pillar.id === 'secretariado-recepcao') return 'Professional Secretariat & Reception';
+      if (pillar.id === 'estrutura-apresentacao') return 'Organization, Infrastructure & Stage';
+      if (pillar.id === 'cerimonial') return 'Ceremonial & Master of Ceremonies';
+    }
+    if (language === 'es') {
+      if (pillar.id === 'secretariado-recepcao') return 'Secretariado y Recepción Profesional';
+      if (pillar.id === 'estrutura-apresentacao') return 'Organización, Estructura y Escenario';
+      if (pillar.id === 'cerimonial') return 'Ceremonial y Maestro de Ceremonias';
+    }
+    return pillar.title;
+  };
+
+  const getPillarSubtitle = (pillar: typeof DETAILED_SERVICES_PILLARS[0]) => {
+    if (language === 'en') {
+      if (pillar.id === 'secretariado-recepcao') return 'The initial touchpoint that delights your attendees';
+      if (pillar.id === 'estrutura-apresentacao') return 'Turnkey stage & tech setup with zero technical risk';
+      if (pillar.id === 'cerimonial') return 'Flawless timing and commanding stage presence';
+    }
+    if (language === 'es') {
+      if (pillar.id === 'secretariado-recepcao') return 'El primer punto de contacto que cautiva a sus invitados';
+      if (pillar.id === 'estrutura-apresentacao') return 'Infraestructura completa y sin riesgos técnicos';
+      if (pillar.id === 'cerimonial') return 'Puntualidad rigurosa y autoridad en el escenario';
+    }
+    return pillar.subtitle;
+  };
+
   return (
     <section id="servicos" className="relative py-20 bg-[#080b12] border-t border-amber-500/10">
       {/* Visual background lights */}
@@ -60,46 +88,46 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-300 text-xs font-bold tracking-wide uppercase">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Soluções Estratégicas</span>
+            <span>{t('services.badge')}</span>
           </div>
           <h2 className="font-['Outfit'] text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
-            Serviços Especializados para o Sucesso do Seu Evento
+            {t('services.title')}
           </h2>
           <p className="text-slate-300 text-base sm:text-lg leading-relaxed">
-            Secretariado profissional, infraestrutura completa, cerimonial e controle de resultados com metodologia validada em mais de 20 anos de mercado.
+            {t('services.subtitle')}
           </p>
         </div>
 
-        {/* Featured Video in 9:16 Aspect Ratio: "Como a MDE Conecta sua Marca a Experiências Inesquecíveis" */}
+        {/* Featured Video in 9:16 Aspect Ratio - PLAYS MUTED WITHOUT SOUND */}
         <div className="mb-20 rounded-3xl bg-gradient-to-r from-[#101424] via-[#16122d] to-[#101424] border-2 border-amber-500/35 p-6 sm:p-10 shadow-2xl relative overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             {/* Text description */}
             <div className="lg:col-span-7 space-y-5 text-left">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-bold">
                 <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                <span>Vídeo Oficial de Soluções</span>
+                <span>{t('services.video.badge')} • {t('reels.livePlaying')}</span>
               </div>
 
               <h3 className="font-['Outfit'] text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white leading-tight">
-                Como a MDE Conecta sua Marca a Experiências Inesquecíveis
+                {t('services.video.title')}
               </h3>
 
               <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-                Assista ao vídeo em formato vertical e entenda como nossa metodologia integra credenciamento ágil com QR Code, montagem estrutural impecável, captação de patrocinadores e gestão integral com mais de 20 anos de tradição.
+                {t('services.video.desc')}
               </p>
 
               <div className="space-y-3 pt-2">
                 <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-200">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Convidar e engajar leads qualificados para conhecer seus produtos</span>
+                  <span>{t('services.video.check1')}</span>
                 </div>
                 <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-200">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Supervisão e contratação de fornecedores homologados</span>
+                  <span>{t('services.video.check2')}</span>
                 </div>
                 <div className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-200">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                  <span>Acompanhamento operacional contínuo no local e no pós-evento</span>
+                  <span>{t('services.video.check3')}</span>
                 </div>
               </div>
 
@@ -109,14 +137,14 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
                     playCoinSound();
                     onSelectServiceForBudget('Planejamento e Gestão de Eventos Corporativos');
                   }}
-                  className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold text-sm shadow-xl shadow-amber-500/20 hover:scale-105 active:scale-95 transition-all"
+                  className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold text-sm shadow-xl shadow-amber-500/20 hover:scale-105 active:scale-95 transition-all cursor-pointer"
                 >
-                  Solicitar Proposta para Este Formato
+                  {t('services.video.cta')}
                 </button>
               </div>
             </div>
 
-            {/* Video Player Frame in 9:16 vertical format as requested */}
+            {/* Video Player Frame in 9:16 vertical format (Autoplay without sound by default) */}
             <div className="lg:col-span-5 flex justify-center">
               <div className="relative w-full max-w-[280px] sm:max-w-[320px] aspect-[9/16] rounded-3xl overflow-hidden bg-black border-2 border-amber-500/50 shadow-2xl group">
                 <div className="absolute -inset-1 bg-gradient-to-r from-amber-500/30 via-purple-600/30 to-amber-500/30 rounded-3xl blur-md opacity-70 pointer-events-none" />
@@ -125,6 +153,9 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
                   src={solutionsVideoUrl}
                   playsInline
                   controls
+                  autoPlay
+                  muted
+                  loop
                   className="relative z-10 w-full h-full object-cover rounded-3xl"
                 />
               </div>
@@ -136,10 +167,10 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
         <div className="mb-20">
           <div className="text-left mb-8">
             <span className="text-xs uppercase font-extrabold tracking-widest text-amber-400">
-              Pilares de Execução Impecável
+              {t('services.pillars.title')}
             </span>
             <h3 className="font-['Outfit'] text-2xl sm:text-3xl font-bold text-white mt-1">
-              Secretariado, Infraestrutura & Cerimonial de Alta Performance
+              {t('services.pillars.sub')}
             </h3>
           </div>
 
@@ -162,10 +193,10 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
                   </div>
 
                   <h4 className="font-['Outfit'] text-xl font-bold text-white mb-1">
-                    {pillar.title}
+                    {getPillarTitle(pillar)}
                   </h4>
                   <p className="text-xs text-amber-300/90 font-medium mb-3">
-                    {pillar.subtitle}
+                    {getPillarSubtitle(pillar)}
                   </p>
                   <p className="text-xs text-slate-300 leading-relaxed mb-5">
                     {pillar.description}
@@ -187,9 +218,9 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
                       playButtonClick();
                       onSelectServiceForBudget(pillar.title);
                     }}
-                    className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-amber-500/40 text-amber-300 font-bold text-xs transition-colors flex items-center justify-center gap-2"
+                    className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-amber-500/40 text-amber-300 font-bold text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
                   >
-                    <span>Incluir no Orçamento</span>
+                    <span>{language === 'en' ? 'Include in Quote' : language === 'es' ? 'Incluir en Presupuesto' : 'Incluir no Orçamento'}</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -203,13 +234,13 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
           <div className="max-w-2xl mb-8 space-y-1">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/15 border border-purple-500/30 text-purple-300 text-xs font-bold uppercase tracking-wider">
               <Target className="w-3.5 h-3.5" />
-              <span>Objetivos Específicos</span>
+              <span>{language === 'en' ? 'Core Objectives' : language === 'es' ? 'Objetivos Específicos' : 'Objetivos Específicos'}</span>
             </div>
             <h3 className="font-['Outfit'] text-2xl sm:text-3xl font-bold text-white">
-              O Que Garantimos em Cada Etapa do Seu Evento
+              {language === 'en' ? 'What We Guarantee Across Every Stage' : language === 'es' ? 'Lo que Garantizamos en Cada Etapa' : 'O Que Garantimos em Cada Etapa do Seu Evento'}
             </h3>
             <p className="text-xs sm:text-sm text-slate-400">
-              Metas claras e supervisão profissional para garantir retorno real sobre o investimento.
+              {language === 'en' ? 'Clear benchmarks and executive supervision to maximize your event ROI.' : language === 'es' ? 'Metas claras y supervisión profesional para garantizar el retorno de inversión.' : 'Metas claras e supervisão profissional para garantir retorno real sobre o investimento.'}
             </p>
           </div>
 
@@ -279,9 +310,9 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
                     playButtonClick();
                     setSelectedService(service);
                   }}
-                  className="text-xs sm:text-sm font-semibold text-slate-300 hover:text-amber-300 flex items-center gap-1.5 transition-colors"
+                  className="text-xs sm:text-sm font-semibold text-slate-300 hover:text-amber-300 flex items-center gap-1.5 transition-colors cursor-pointer"
                 >
-                  <span>Ver detalhes completos</span>
+                  <span>{t('services.viewDetails')}</span>
                   <ChevronRight className="w-4 h-4" />
                 </button>
 
@@ -290,9 +321,9 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
                     playCoinSound();
                     onSelectServiceForBudget(service.title);
                   }}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 hover:border-amber-500/50 text-amber-300 font-bold text-xs transition-all hover:scale-105"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/30 hover:border-amber-500/50 text-amber-300 font-bold text-xs transition-all hover:scale-105 cursor-pointer"
                 >
-                  <span>Solicitar Orçamento</span>
+                  <span>{t('nav.cta')}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </div>
@@ -308,10 +339,10 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
             </div>
             <div>
               <h4 className="font-['Outfit'] text-sm sm:text-base font-bold text-white">
-                Gestão e Emissão de Ingressos Integrada ao Sympla
+                {language === 'en' ? 'Sympla Ticketing & Rapid Check-in System' : language === 'es' ? 'Gestión de Boletos y Acreditación Integrada con Sympla' : 'Gestão e Emissão de Ingressos Integrada ao Sympla'}
               </h4>
               <p className="text-xs text-slate-300">
-                Garantimos bilheteria segura, controle de lotes, totens de credenciamento e leitura de QR code no dia do evento sem filas.
+                {language === 'en' ? 'Secure ticket tiers, attendee badge kiosks, and zero-line QR code scanning.' : language === 'es' ? 'Control de aforos, boletos seguros, quioscos de acreditación y lectura QR sin filas.' : 'Garantimos bilheteria segura, controle de lotes, totens de credenciamento e leitura de QR code no dia do evento sem filas.'}
               </p>
             </div>
           </div>
@@ -320,9 +351,9 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
               playCoinSound();
               onSelectServiceForBudget('Criação de Conteúdo e Marketing de Eventos / Sympla');
             }}
-            className="shrink-0 px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition-colors hover:scale-105 active:scale-95"
+            className="shrink-0 px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition-colors hover:scale-105 active:scale-95 cursor-pointer"
           >
-            Quero Integrar ao Sympla
+            Sympla Integration
           </button>
         </div>
       </div>

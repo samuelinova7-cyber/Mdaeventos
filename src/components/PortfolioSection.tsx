@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { PORTFOLIO_CASES } from '../data/content';
 import { PortfolioCase } from '../types';
 import { CaseDetailModal } from './CaseDetailModal';
-import { Sparkles, MapPin, Users, ArrowUpRight, Award, Camera } from 'lucide-react';
+import { MapPin, Users, ArrowUpRight, Award, Camera } from 'lucide-react';
 import { playButtonClick, playCoinSound } from '../utils/audio';
+import { useLanguage } from '../context/LanguageContext';
 
 interface PortfolioSectionProps {
   whatsappPhone: string;
@@ -11,16 +12,21 @@ interface PortfolioSectionProps {
 
 export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ whatsappPhone }) => {
   const [selectedCase, setSelectedCase] = useState<PortfolioCase | null>(null);
-  const [activeFilter, setActiveFilter] = useState<string>('Todos');
+  const { t, language } = useLanguage();
+  const [activeFilter, setActiveFilter] = useState<string>('all');
 
-  const categories = ['Todos', 'Congressos & Feiras', 'Educação', 'Talk Shows', 'Corporativo'];
+  const categories = [
+    { id: 'all', label: t('portfolio.filter.all') },
+    { id: 'congress', label: t('portfolio.filter.congress') },
+    { id: 'fairs', label: t('portfolio.filter.fairs') },
+    { id: 'institutional', label: t('portfolio.filter.institutional') },
+  ];
 
   const filteredCases = PORTFOLIO_CASES.filter((c) => {
-    if (activeFilter === 'Todos') return true;
-    if (activeFilter === 'Congressos & Feiras') return c.category.includes('Congresso') || c.category.includes('Feira');
-    if (activeFilter === 'Educação') return c.category.includes('Educacional');
-    if (activeFilter === 'Talk Shows') return c.category.includes('Talk Show');
-    if (activeFilter === 'Corporativo') return c.category.includes('Fórum') || c.category.includes('Corporativo');
+    if (activeFilter === 'all') return true;
+    if (activeFilter === 'congress') return c.category.includes('Congresso') || c.category.includes('Fórum');
+    if (activeFilter === 'fairs') return c.category.includes('Feira') || c.category.includes('Inovação');
+    if (activeFilter === 'institutional') return c.category.includes('CREMAL') || c.category.includes('Institucional') || c.category.includes('Odontologia') || c.category.includes('Talk Show');
     return true;
   });
 
@@ -36,13 +42,13 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ whatsappPhon
           <div className="space-y-3 max-w-2xl text-left">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/15 border border-purple-500/30 text-purple-300 text-xs font-bold uppercase tracking-wide">
               <Camera className="w-3.5 h-3.5 text-purple-400" />
-              <span>Portfólio & Cases de Sucesso</span>
+              <span>{t('portfolio.badge')}</span>
             </div>
             <h2 className="font-['Outfit'] text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
-              Grandes Eventos Produzidos pela MDE
+              {t('portfolio.title')}
             </h2>
             <p className="text-slate-300 text-base sm:text-lg">
-              Veja como transformamos ideias em experiências épicas com público qualificado, palcos modernos e repercussão em Alagoas.
+              {t('portfolio.subtitle')}
             </p>
           </div>
 
@@ -50,18 +56,18 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ whatsappPhon
           <div className="flex flex-wrap gap-2">
             {categories.map((cat) => (
               <button
-                key={cat}
+                key={cat.id}
                 onClick={() => {
                   playButtonClick();
-                  setActiveFilter(cat);
+                  setActiveFilter(cat.id);
                 }}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                  activeFilter === cat
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                  activeFilter === cat.id
                     ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20 font-bold'
                     : 'bg-slate-900/80 text-slate-400 hover:text-white hover:bg-slate-800 border border-slate-800'
                 }`}
               >
-                {cat}
+                {cat.label}
               </button>
             ))}
           </div>
@@ -128,7 +134,7 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ whatsappPhon
                     <span>{item.highlights[0]}</span>
                   </div>
                   <span className="text-xs font-bold text-amber-300 group-hover:underline flex items-center gap-1">
-                    Ver Case Completo
+                    {t('portfolio.viewCase')}
                   </span>
                 </div>
               </div>

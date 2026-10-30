@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
-import { Award, Sparkles, MessageCircle, Mic, CheckCircle2, Instagram, Target, HeartHandshake, Compass } from 'lucide-react';
+import React from 'react';
+import { Award, Sparkles, MessageCircle, Mic, CheckCircle2, Instagram, Target, Compass } from 'lucide-react';
 import { BRAND_INFO } from '../data/content';
 import { playButtonClick, playCoinSound } from '../utils/audio';
+import { useTheme } from '../context/ThemeContext';
+import { useLanguage } from '../context/LanguageContext';
 
 interface FoundersSectionProps {
   whatsappPhone: string;
@@ -9,17 +11,53 @@ interface FoundersSectionProps {
 }
 
 export const FoundersSection: React.FC<FoundersSectionProps> = ({ whatsappPhone, onOpenBudget }) => {
-  const [isPlayingPodcast, setIsPlayingPodcast] = useState(false);
+  const { isDark } = useTheme();
+  const { t, language } = useLanguage();
 
-  const foundersPhotoUrl = 'https://res.cloudinary.com/hd1sahto/image/upload/v1793395554/SnapInsta.to_817531807_18088438463673962_7145530811541186708_n.jpg';
-  const podcastVideoUrl = 'https://res.cloudinary.com/hd1sahto/video/upload/v1793395578/SnapInsta.to_AQMZGAcndaCks5VmxCwfnQy27HhoZY3MLNskferkFd_e9BsdO1SyLVLAwBMpT0ACxjFdCT8AxLhAIVKwKgCxuHoBXMDiaRjPELDtYaw.mp4';
+  const foundersPhotoUrl =
+    'https://res.cloudinary.com/hd1sahto/image/upload/v1793395554/SnapInsta.to_817531807_18088438463673962_7145530811541186708_n.jpg';
+  const podcastVideoUrl =
+    'https://res.cloudinary.com/hd1sahto/video/upload/v1793395578/SnapInsta.to_AQMZGAcndaCks5VmxCwfnQy27HhoZY3MLNskferkFd_e9BsdO1SyLVLAwBMpT0ACxjFdCT8AxLhAIVKwKgCxuHoBXMDiaRjPELDtYaw.mp4';
 
-  const directWhatsAppUrl = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(
-    'Olá! Vi a história das sócias fundadoras e os mais de 20 anos de atuação da MDE Eventos. Gostaria de agendar uma reunião estratégica para meu evento.'
-  )}`;
+  const getDirectWhatsAppUrl = () => {
+    let msg = 'Olá! Vi a história das sócias fundadoras e os mais de 20 anos de atuação da MDE Eventos. Gostaria de agendar uma reunião estratégica para meu evento.';
+    if (language === 'en') {
+      msg = 'Hello! I learned about the founding partners and MDE Eventos 20+ years of expertise. I would like to schedule a strategic consultation for our event.';
+    } else if (language === 'es') {
+      msg = '¡Hola! Conocí la historia de las socias fundadoras y los más de 20 años de experiencia de MDE Eventos. Quisiera agendar una reunión estratégica para mi evento.';
+    }
+    return `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(msg)}`;
+  };
+
+  const getMissionText = () => {
+    if (language === 'en') {
+      return 'Fostering entrepreneurship and corporate growth through strategic solutions, turning executive visions into enduring and impactful milestones.';
+    }
+    if (language === 'es') {
+      return 'Impulsar el espíritu empresarial mediante soluciones estratégicas, transformando visiones corporativas en realidades sólidas y duraderas.';
+    }
+    return BRAND_INFO.mission;
+  };
+
+  const getPurposeText = () => {
+    if (language === 'en') {
+      return 'Streamlining flawless event execution to ensure strict KPI control, high attendee satisfaction, and enduring brand prestige.';
+    }
+    if (language === 'es') {
+      return 'Facilitar la ejecución de estrategias en eventos para garantizar el máximo control de resultados y la satisfacción de los asistentes.';
+    }
+    return BRAND_INFO.purpose;
+  };
 
   return (
-    <section id="socias" className="relative py-20 bg-gradient-to-b from-[#090d18] via-[#0e1424] to-[#090d18] border-t border-amber-500/15 overflow-hidden">
+    <section
+      id="socias"
+      className={`relative py-20 border-t transition-colors duration-300 overflow-hidden ${
+        isDark
+          ? 'bg-gradient-to-b from-[#090d18] via-[#0e1424] to-[#090d18] border-amber-500/15'
+          : 'bg-white border-slate-200'
+      }`}
+    >
       {/* Background glow lights */}
       <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[600px] h-[600px] bg-purple-900/10 blur-[150px] pointer-events-none" />
       <div className="absolute top-10 right-10 w-96 h-96 bg-amber-500/10 blur-[130px] pointer-events-none" />
@@ -27,40 +65,56 @@ export const FoundersSection: React.FC<FoundersSectionProps> = ({ whatsappPhone,
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500/20 to-purple-500/20 border border-amber-500/35 text-amber-300 text-xs font-bold uppercase tracking-wider">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/15 border border-amber-500/35 text-amber-500 dark:text-amber-300 text-xs font-bold uppercase tracking-wider">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>{BRAND_INFO.experienceYears}</span>
+            <span>{t('founders.badge')}</span>
           </div>
-          <h2 className="font-['Outfit'] text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
-            As Sócias Fundadoras da{' '}
-            <span className="bg-gradient-to-r from-amber-300 via-amber-200 to-amber-500 bg-clip-text text-transparent">
-              MDE Eventos
+          <h2
+            className={`font-['Outfit'] text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight ${
+              isDark ? 'text-white' : 'text-slate-950'
+            }`}
+          >
+            {t('founders.title.part1')}{' '}
+            <span className="bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600 dark:from-amber-300 dark:via-amber-200 dark:to-amber-500 bg-clip-text text-transparent">
+              {t('founders.title.brand')}
             </span>
           </h2>
-          <p className="text-slate-300 text-base sm:text-lg">
-            Mais de duas décadas realizando eventos corporativos de sucesso em Alagoas e em vários estados do Brasil.
+          <p className={`text-base sm:text-lg ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+            {t('founders.subtitle')}
           </p>
         </div>
 
         {/* Top Cards: Missão & Propósito */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-14">
-          <div className="p-6 rounded-2xl bg-gradient-to-r from-slate-900/90 to-purple-950/40 border border-amber-500/30 text-left space-y-2">
-            <div className="flex items-center gap-2.5 text-amber-300 font-bold text-sm">
-              <Target className="w-5 h-5 text-amber-400" />
-              <span>Nossa Missão</span>
+          <div
+            className={`p-6 rounded-2xl border text-left space-y-2 transition-colors ${
+              isDark
+                ? 'bg-gradient-to-r from-slate-900/90 to-purple-950/40 border-amber-500/30'
+                : 'bg-slate-50 border-amber-500/30 shadow-sm'
+            }`}
+          >
+            <div className="flex items-center gap-2.5 text-amber-500 dark:text-amber-300 font-bold text-sm">
+              <Target className="w-5 h-5 text-amber-500" />
+              <span>{t('founders.mission.title')}</span>
             </div>
-            <p className="text-sm text-slate-200 leading-relaxed">
-              {BRAND_INFO.mission}
+            <p className={`text-sm leading-relaxed ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>
+              {getMissionText()}
             </p>
           </div>
 
-          <div className="p-6 rounded-2xl bg-gradient-to-r from-slate-900/90 to-amber-950/30 border border-purple-500/30 text-left space-y-2">
-            <div className="flex items-center gap-2.5 text-purple-300 font-bold text-sm">
-              <Compass className="w-5 h-5 text-purple-400" />
-              <span>Nosso Propósito</span>
+          <div
+            className={`p-6 rounded-2xl border text-left space-y-2 transition-colors ${
+              isDark
+                ? 'bg-gradient-to-r from-slate-900/90 to-amber-950/30 border-purple-500/30'
+                : 'bg-slate-50 border-purple-300 shadow-sm'
+            }`}
+          >
+            <div className="flex items-center gap-2.5 text-purple-600 dark:text-purple-300 font-bold text-sm">
+              <Compass className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+              <span>{t('founders.purpose.title')}</span>
             </div>
-            <p className="text-sm text-slate-200 leading-relaxed">
-              {BRAND_INFO.purpose}
+            <p className={`text-sm leading-relaxed ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>
+              {getPurposeText()}
             </p>
           </div>
         </div>
@@ -72,9 +126,17 @@ export const FoundersSection: React.FC<FoundersSectionProps> = ({ whatsappPhone,
             {/* Glowing border effect */}
             <div className="absolute -inset-2 bg-gradient-to-tr from-amber-500/40 via-purple-600/30 to-amber-400/40 rounded-3xl blur-xl opacity-80 animate-pulse pointer-events-none" />
 
-            <div className="relative w-full rounded-2xl bg-[#080c16] border-2 border-amber-500/40 overflow-hidden shadow-2xl p-2 sm:p-3 flex flex-col items-center">
+            <div
+              className={`relative w-full rounded-2xl border-2 overflow-hidden shadow-2xl p-2 sm:p-3 flex flex-col items-center ${
+                isDark ? 'bg-[#080c16] border-amber-500/40' : 'bg-white border-amber-500/40'
+              }`}
+            >
               {/* Full scale uncropped photo container */}
-              <div className="w-full flex items-center justify-center bg-[#050811] rounded-xl overflow-hidden p-1">
+              <div
+                className={`w-full flex items-center justify-center rounded-xl overflow-hidden p-1 ${
+                  isDark ? 'bg-[#050811]' : 'bg-slate-100'
+                }`}
+              >
                 <img
                   src={foundersPhotoUrl}
                   alt="Sócias Fundadoras da MDE Eventos em escala total"
@@ -84,14 +146,18 @@ export const FoundersSection: React.FC<FoundersSectionProps> = ({ whatsappPhone,
               </div>
 
               {/* Lower Details Badge */}
-              <div className="w-full mt-3 p-4 rounded-xl bg-slate-950/90 border border-amber-500/30 text-left">
+              <div
+                className={`w-full mt-3 p-4 rounded-xl border text-left ${
+                  isDark ? 'bg-slate-950/90 border-amber-500/30' : 'bg-slate-50 border-slate-200'
+                }`}
+              >
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <h3 className="font-['Outfit'] font-black text-lg text-white">
-                      Sócias Fundadoras • MDE Eventos
+                    <h3 className={`font-['Outfit'] font-black text-lg ${isDark ? 'text-white' : 'text-slate-950'}`}>
+                      {t('founders.card.title')}
                     </h3>
-                    <p className="text-xs text-amber-300 font-medium">
-                      Eventos, Marketing & Soluções Empresariais • +20 Anos de Sucesso
+                    <p className="text-xs text-amber-600 dark:text-amber-300 font-semibold">
+                      {t('founders.card.sub')}
                     </p>
                   </div>
                   <a
@@ -99,7 +165,7 @@ export const FoundersSection: React.FC<FoundersSectionProps> = ({ whatsappPhone,
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => playButtonClick()}
-                    className="p-2.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 transition-colors"
+                    className="p-2.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-500 dark:text-amber-300 transition-colors"
                     aria-label="Instagram MDE"
                   >
                     <Instagram className="w-4 h-4" />
@@ -109,69 +175,78 @@ export const FoundersSection: React.FC<FoundersSectionProps> = ({ whatsappPhone,
             </div>
           </div>
 
-          {/* Right: Story & Podcast Video in 9:16 vertical ratio */}
+          {/* Right: Story & Podcast Video (AUTOPLAY MUTED WITHOUT SOUND) */}
           <div className="lg:col-span-6 space-y-6 text-left">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-950/60 border border-purple-500/30 text-purple-300 text-xs font-semibold">
-              <Award className="w-3.5 h-3.5 text-purple-400" />
-              <span>Experiência Real & Conexões Corporativas</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/15 border border-purple-500/30 text-purple-700 dark:text-purple-300 text-xs font-semibold">
+              <Award className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
+              <span>{t('founders.story.badge')}</span>
             </div>
 
-            <h3 className="font-['Outfit'] text-2xl sm:text-3xl font-bold text-white leading-tight">
-              Uma abordagem consultiva que transforma expectativas em marcos históricos para sua empresa.
+            <h3 className={`font-['Outfit'] text-2xl sm:text-3xl font-bold leading-tight ${
+              isDark ? 'text-white' : 'text-slate-950'
+            }`}>
+              {t('founders.story.heading')}
             </h3>
 
-            <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-              À frente dos maiores congressos e encontros empresariais do estado, as fundadoras da <strong>MDE Eventos</strong> unem metodologia com controle de resultados, gestão de palestrantes e uma equipe experiente de secretariado e cerimonial.
+            <p className={`text-sm sm:text-base leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              {t('founders.story.p1')}
             </p>
 
             {/* Checklist */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-              <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-200">
-                <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>Gestão direta pelas fundadoras</span>
+              <div className={`flex items-center gap-2 text-xs sm:text-sm ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>
+                <CheckCircle2 className="w-4 h-4 text-amber-500 shrink-0" />
+                <span>{t('founders.check1')}</span>
               </div>
-              <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-200">
-                <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>Mais de 20 anos de atuação</span>
+              <div className={`flex items-center gap-2 text-xs sm:text-sm ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>
+                <CheckCircle2 className="w-4 h-4 text-amber-500 shrink-0" />
+                <span>{t('founders.check2')}</span>
               </div>
-              <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-200">
-                <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>Atendimento em AL e em todo o Brasil</span>
+              <div className={`flex items-center gap-2 text-xs sm:text-sm ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>
+                <CheckCircle2 className="w-4 h-4 text-amber-500 shrink-0" />
+                <span>{t('founders.check3')}</span>
               </div>
-              <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-200">
-                <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>Supervisão rigorosa de ponta a ponta</span>
+              <div className={`flex items-center gap-2 text-xs sm:text-sm ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>
+                <CheckCircle2 className="w-4 h-4 text-amber-500 shrink-0" />
+                <span>{t('founders.check4')}</span>
               </div>
             </div>
 
-            {/* Podcast Video in 9:16 Aspect Ratio as requested */}
-            <div className="p-5 rounded-2xl bg-gradient-to-r from-purple-950/40 to-slate-900 border border-purple-500/40 space-y-4">
+            {/* Podcast Video in 9:16 Aspect Ratio - PLAYS MUTED WITHOUT SOUND */}
+            <div
+              className={`p-5 rounded-2xl border space-y-4 ${
+                isDark
+                  ? 'bg-gradient-to-r from-purple-950/40 to-slate-900 border-purple-500/40'
+                  : 'bg-purple-50/50 border-purple-200 shadow-sm'
+              }`}
+            >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
-                  <div className="p-2 rounded-lg bg-purple-500/20 text-purple-300">
+                  <div className="p-2 rounded-lg bg-purple-500/20 text-purple-700 dark:text-purple-300">
                     <Mic className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="font-['Outfit'] font-bold text-sm text-white">
-                      As Sócias no Podcast (Formato 9:16)
+                    <h4 className={`font-['Outfit'] font-bold text-sm ${isDark ? 'text-white' : 'text-slate-950'}`}>
+                      {t('founders.podcast.title')}
                     </h4>
-                    <p className="text-[11px] text-slate-400">
-                      Entrevista e visão estratégica sobre a execução de eventos memoráveis
+                    <p className={`text-[11px] ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                      {t('founders.podcast.sub')} • {t('reels.livePlaying')}
                     </p>
                   </div>
                 </div>
               </div>
 
-              {/* 9:16 Video Player Container */}
+              {/* 9:16 Video Player Container (Autoplay without sound by default) */}
               <div className="w-full flex justify-center py-2">
                 <div className="relative w-full max-w-[280px] sm:max-w-[320px] aspect-[9/16] rounded-2xl overflow-hidden bg-black border-2 border-purple-500/50 shadow-2xl">
                   <video
                     src={podcastVideoUrl}
                     controls
                     playsInline
+                    autoPlay
+                    muted
+                    loop
                     className="w-full h-full object-cover"
-                    onPlay={() => setIsPlayingPodcast(true)}
-                    onPause={() => setIsPlayingPodcast(false)}
                   />
                 </div>
               </div>
@@ -180,14 +255,14 @@ export const FoundersSection: React.FC<FoundersSectionProps> = ({ whatsappPhone,
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
               <a
-                href={directWhatsAppUrl}
+                href={getDirectWhatsAppUrl()}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => playCoinSound()}
-                className="w-full sm:w-auto flex-1 flex items-center justify-center gap-2 py-3 px-5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm shadow-lg shadow-emerald-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                className="w-full sm:w-auto flex-1 flex items-center justify-center gap-2 py-3 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow-lg shadow-emerald-600/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
               >
-                <MessageCircle className="w-4 h-4 fill-slate-950" />
-                <span>Conversar com as Sócias no WhatsApp</span>
+                <MessageCircle className="w-4 h-4 fill-white" />
+                <span>{t('founders.cta.whatsapp')}</span>
               </a>
 
               <button
@@ -195,9 +270,13 @@ export const FoundersSection: React.FC<FoundersSectionProps> = ({ whatsappPhone,
                   playButtonClick();
                   onOpenBudget();
                 }}
-                className="w-full sm:w-auto px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 border border-amber-500/30 text-amber-300 font-bold text-sm hover:scale-[1.02] active:scale-[0.98] transition-all"
+                className={`w-full sm:w-auto px-5 py-3 rounded-xl border font-bold text-sm hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer ${
+                  isDark
+                    ? 'bg-slate-800 hover:bg-slate-700 border-amber-500/30 text-amber-300'
+                    : 'bg-white hover:bg-slate-50 border-slate-300 text-slate-800 shadow-sm'
+                }`}
               >
-                Solicitar Proposta
+                {t('founders.cta.budget')}
               </button>
             </div>
           </div>

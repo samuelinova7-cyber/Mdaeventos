@@ -2,23 +2,25 @@ import React, { useState } from 'react';
 import { Header } from './components/Header';
 import { HeroSection } from './components/HeroSection';
 import { InstagramReelsSection } from './components/InstagramReelsSection';
+import { BudgetGeneratorSection } from './components/BudgetGeneratorSection';
+import { TestimonialsSection } from './components/TestimonialsSection';
 import { SocialProofSection } from './components/SocialProofSection';
 import { FoundersSection } from './components/FoundersSection';
 import { ServicesSection } from './components/ServicesSection';
 import { PortfolioSection } from './components/PortfolioSection';
 import { WhyChooseUs } from './components/WhyChooseUs';
-import { BudgetGeneratorSection } from './components/BudgetGeneratorSection';
-import { TestimonialsSection } from './components/TestimonialsSection';
 import { FAQSection } from './components/FAQSection';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
 import { LiveNotificationToasts } from './components/LiveNotificationToasts';
 import { FloatingParticles } from './components/FloatingParticles';
 import { Footer } from './components/Footer';
 import { BRAND_INFO } from './data/content';
+import { useTheme } from './context/ThemeContext';
 
 export default function App() {
   const [whatsappPhone, setWhatsappPhone] = useState<string>(BRAND_INFO.phone);
   const [preselectedService, setPreselectedService] = useState<string | undefined>(undefined);
+  const { isDark } = useTheme();
 
   const scrollToBudget = (serviceTitle?: string) => {
     if (serviceTitle) {
@@ -31,11 +33,15 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#080B11] text-slate-100 selection:bg-amber-500/30 selection:text-amber-200 overflow-x-hidden relative">
+    <div
+      className={`min-h-screen ${
+        isDark ? 'bg-[#080B11] text-slate-100' : 'bg-slate-50 text-slate-900 light-mode'
+      } selection:bg-amber-500/30 selection:text-amber-300 overflow-x-hidden relative transition-colors duration-300`}
+    >
       {/* Flying Glowing Particles Background */}
       <FloatingParticles />
 
-      {/* Header with Announcement Ticker & Glowing Logo */}
+      {/* Header with Announcement Ticker, Single Responsive Glowing Logo & Theme Switcher */}
       <Header
         onOpenBudget={() => scrollToBudget()}
         whatsappPhone={whatsappPhone}
@@ -49,6 +55,16 @@ export default function App() {
 
       {/* Instagram Reels Section - DIRECTLY BELOW HERO SECTION (Side-by-side with horizontal drag, autoplay muted, with sound toggle) */}
       <InstagramReelsSection />
+
+      {/* UPPER SECTION: Interactive Budget Generator (Lead Generator to WhatsApp with Shining Budget Image) */}
+      <BudgetGeneratorSection
+        whatsappPhone={whatsappPhone}
+        onUpdatePhone={(newPhone) => setWhatsappPhone(newPhone)}
+        preselectedService={preselectedService}
+      />
+
+      {/* UPPER SECTION: Testimonials & Shining Review Image (Avaliar o Serviço) */}
+      <TestimonialsSection />
 
       {/* Social Proof & Authority Numbers (+20 Anos de Mercado & Clientes em Destaque CREMAL / Arcos) */}
       <SocialProofSection />
@@ -72,16 +88,6 @@ export default function App() {
 
       {/* Why Choose MDE Eventos / Metodologia */}
       <WhyChooseUs />
-
-      {/* Interactive Budget Generator (Lead Generator to WhatsApp with Shining Budget Image) */}
-      <BudgetGeneratorSection
-        whatsappPhone={whatsappPhone}
-        onUpdatePhone={(newPhone) => setWhatsappPhone(newPhone)}
-        preselectedService={preselectedService}
-      />
-
-      {/* Testimonials & Shining Review Image (Avaliar o Serviço) */}
-      <TestimonialsSection />
 
       {/* FAQ Section */}
       <FAQSection

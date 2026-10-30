@@ -1,6 +1,7 @@
 import React from 'react';
 import { X, CheckCircle2, ArrowRight, MessageCircle, Sparkles } from 'lucide-react';
 import { ServiceItem } from '../types';
+import { useLanguage } from '../context/LanguageContext';
 
 interface ServiceDetailModalProps {
   service: ServiceItem | null;
@@ -15,10 +16,15 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
   onSelectBudget,
   whatsappPhone,
 }) => {
+  const { language } = useLanguage();
   if (!service) return null;
 
   const directWhatsAppUrl = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(
-    `Olá! Gostaria de detalhes e orçamento específico para o serviço: ${service.title}.`
+    language === 'en'
+      ? `Hello! I would like details and a quote for: ${service.title}.`
+      : language === 'es'
+        ? `¡Hola! Deseo cotización y detalles del servicio: ${service.title}.`
+        : `Olá! Gostaria de detalhes e orçamento específico para o serviço: ${service.title}.`
   )}`;
 
   return (
@@ -27,7 +33,7 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 rounded-lg bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+          className="absolute top-4 right-4 p-2 rounded-lg bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
           aria-label="Fechar"
         >
           <X className="w-5 h-5" />
@@ -38,7 +44,7 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
           <span className="px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-bold">
             {service.badge}
           </span>
-          <span className="text-xs text-slate-400 font-medium">Solução MDE Eventos</span>
+          <span className="text-xs text-slate-400 font-medium">MDE Eventos</span>
         </div>
 
         <h3 className="font-['Outfit'] text-2xl sm:text-3xl font-bold text-white mb-3 leading-tight">
@@ -52,7 +58,7 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
         {/* Feature List */}
         <div className="space-y-4 mb-6">
           <h4 className="text-xs uppercase tracking-wider font-bold text-amber-400">
-            O que está incluso neste serviço:
+            {language === 'en' ? 'What is included in this service:' : language === 'es' ? 'Qué está incluido en este servicio:' : 'O que está incluso neste serviço:'}
           </h4>
           <div className="grid grid-cols-1 gap-2.5">
             {service.features.map((feat, idx) => (
@@ -68,7 +74,7 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
         <div className="space-y-3 mb-8 p-4 rounded-xl bg-slate-900/80 border border-slate-800">
           <h4 className="text-xs uppercase tracking-wider font-bold text-purple-300 flex items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Entregáveis e Garantias:</span>
+            <span>{language === 'en' ? 'Deliverables & Guarantees:' : language === 'es' ? 'Entregables y Garantías:' : 'Entregáveis e Garantias:'}</span>
           </h4>
           <ul className="list-disc list-inside space-y-1.5 text-xs text-slate-300">
             {service.deliverables.map((item, idx) => (
@@ -86,7 +92,7 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
             className="w-full sm:w-auto flex-1 flex items-center justify-center gap-2 py-3 px-5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm shadow-lg shadow-emerald-500/20 transition-colors"
           >
             <MessageCircle className="w-4 h-4 fill-slate-950" />
-            <span>Falar sobre este Serviço no WhatsApp</span>
+            <span>WhatsApp</span>
           </a>
 
           <button
@@ -94,9 +100,9 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
               onClose();
               onSelectBudget(service.title);
             }}
-            className="w-full sm:w-auto flex items-center justify-center gap-2 py-3 px-5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-sm border border-slate-700 transition-colors"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 py-3 px-5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-sm border border-slate-700 transition-colors cursor-pointer"
           >
-            <span>Incluir no Orçamento</span>
+            <span>{language === 'en' ? 'Include in Quote' : language === 'es' ? 'Incluir en Presupuesto' : 'Incluir no Orçamento'}</span>
             <ArrowRight className="w-4 h-4 text-amber-400" />
           </button>
         </div>

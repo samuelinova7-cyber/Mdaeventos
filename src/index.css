@@ -93,3 +93,183 @@
   animation: shineSweep 4s ease-in-out infinite;
   pointer-events: none;
 }
+
+/* ==========================================================================
+   Day Mode (Modo Dia / Claro) Styling
+   Transforms background, cards, text, and inputs to bright crisp palette
+   ========================================================================== */
+html.light,
+[data-theme="light"],
+.light-mode {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+/* Base backgrounds of sections */
+html.light body,
+[data-theme="light"] body,
+.light-mode section,
+html.light section,
+[data-theme="light"] section,
+.light-mode .bg-\[\#080B11\],
+html.light .bg-\[\#080B11\],
+.light-mode .bg-\[\#080b11\],
+html.light .bg-\[\#080b11\],
+.light-mode .bg-\[\#080b12\],
+html.light .bg-\[\#080b12\],
+.light-mode .bg-\[\#080b13\],
+html.light .bg-\[\#080b13\],
+.light-mode .bg-\[\#05080f\],
+html.light .bg-\[\#05080f\],
+.light-mode .bg-\[\#0a0d16\],
+html.light .bg-\[\#0a0d16\],
+.light-mode .bg-\[\#0e1626\],
+html.light .bg-\[\#0e1626\],
+.light-mode .bg-\[\#0d121f\],
+html.light .bg-\[\#0d121f\],
+.light-mode .bg-slate-950,
+html.light .bg-slate-950,
+.light-mode footer,
+html.light footer {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+/* Card surfaces */
+html.light .bg-\[\#0d121f\],
+html.light .bg-\[\#0e1424\],
+html.light .bg-\[\#0a0d16\],
+html.light .bg-\[\#0f1424\],
+html.light .bg-slate-900,
+html.light .bg-slate-900\/90,
+html.light .bg-slate-900\/80,
+html.light .bg-slate-900\/70,
+html.light .bg-slate-900\/60,
+.light-mode .bg-\[\#0d121f\],
+.light-mode .bg-\[\#0e1424\],
+.light-mode .bg-\[\#0a0d16\],
+.light-mode .bg-\[\#0f1424\],
+.light-mode .bg-slate-900,
+.light-mode .bg-slate-900\/90,
+.light-mode .bg-slate-900\/80,
+.light-mode .bg-slate-900\/70,
+.light-mode .bg-slate-900\/60,
+.light-mode .bg-gradient-to-b.from-\[\#0f1424\].to-\[\#0a0d16\],
+html.light .bg-gradient-to-b.from-\[\#0f1424\].to-\[\#0a0d16\],
+.light-mode .bg-gradient-to-b.from-slate-900\/90.to-slate-950\/90,
+html.light .bg-gradient-to-b.from-slate-900\/90.to-slate-950\/90,
+.light-mode .bg-gradient-to-br.from-purple-950\/40.to-slate-900\/60,
+html.light .bg-gradient-to-br.from-purple-950\/40.to-slate-900\/60,
+.light-mode .bg-gradient-to-br.from-\[\#0f172a\].to-\[\#080b11\],
+html.light .bg-gradient-to-br.from-\[\#0f172a\].to-\[\#080b11\] {
+  background-image: none !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 4px 15px -1px rgba(0, 0, 0, 0.05), 0 2px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Header & Ticker in Light Mode */
+.light-mode header > div,
+html.light header > div {
+  background-color: rgba(255, 255, 255, 0.96) !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04) !important;
+}
+
+.light-mode .animate-in.slide-in-from-top-4,
+html.light .animate-in.slide-in-from-top-4 {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* Text adjustments */
+.light-mode .text-white,
+html.light .text-white {
+  color: #0f172a !important;
+}
+
+.light-mode .text-slate-100,
+html.light .text-slate-100 {
+  color: #1e293b !important;
+}
+
+.light-mode .text-slate-200,
+html.light .text-slate-200 {
+  color: #334155 !important;
+}
+
+.light-mode .text-slate-300,
+html.light .text-slate-300 {
+  color: #475569 !important;
+}
+
+.light-mode .text-slate-400,
+html.light .text-slate-400 {
+  color: #64748b !important;
+}
+
+/* Subtle border lines */
+.light-mode .border-slate-800,
+html.light .border-slate-800,
+.light-mode .border-slate-700,
+html.light .border-slate-700,
+.light-mode .border-white\/5,
+html.light .border-white\/5,
+.light-mode .border-white\/10,
+html.light .border-white\/10 {
+  border-color: #e2e8f0 !important;
+}
+
+/* Form fields */
+.light-mode input,
+html.light input,
+.light-mode select,
+html.light select,
+.light-mode textarea,
+html.light textarea {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+
+.light-mode input::placeholder,
+html.light input::placeholder,
+.light-mode textarea::placeholder,
+html.light textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* Preserve transparent gradient text */
+.light-mode .text-transparent,
+html.light .text-transparent {
+  color: transparent !important;
+}
+
+/* WhatsApp chat simulator in light mode stays authentic green */
+.light-mode .bg-\[\#1f2c34\],
+html.light .bg-\[\#1f2c34\] {
+  background-color: #075e54 !important;
+}
+.light-mode .bg-\[\#0b141a\],
+html.light .bg-\[\#0b141a\] {
+  background-color: #eae6df !important;
+}
+.light-mode .bg-\[\#202c33\],
+html.light .bg-\[\#202c33\] {
+  background-color: #ffffff !important;
+  color: #111b21 !important;
+  border: 1px solid #e2e8f0;
+}
+.light-mode .bg-\[\#005c4b\],
+html.light .bg-\[\#005c4b\] {
+  background-color: #d9fdd3 !important;
+  color: #111b21 !important;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+.light-mode .bg-\[\#005c4b\] *,
+html.light .bg-\[\#005c4b\] * {
+  color: #111b21 !important;
+}
+.light-mode .bg-\[\#005c4b\] strong,
+html.light .bg-\[\#005c4b\] strong {
+  color: #075e54 !important;
+}

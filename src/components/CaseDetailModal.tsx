@@ -1,6 +1,7 @@
 import React from 'react';
 import { X, MapPin, Users, Award, CheckCircle2, MessageCircle, Quote } from 'lucide-react';
 import { PortfolioCase } from '../types';
+import { useLanguage } from '../context/LanguageContext';
 
 interface CaseDetailModalProps {
   item: PortfolioCase | null;
@@ -13,10 +14,15 @@ export const CaseDetailModal: React.FC<CaseDetailModalProps> = ({
   onClose,
   whatsappPhone,
 }) => {
+  const { language } = useLanguage();
   if (!item) return null;
 
   const directWhatsAppUrl = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(
-    `Olá! Vi o case do ${item.title} no site da MDE Eventos e gostaria de um formato similar para o evento da minha empresa.`
+    language === 'en'
+      ? `Hello! I saw the ${item.title} case on MDE Eventos website and would like a similar format for our company event.`
+      : language === 'es'
+        ? `¡Hola! Vi el caso de ${item.title} en la web de MDE Eventos y deseo un formato similar para el evento de nuestra empresa.`
+        : `Olá! Vi o case do ${item.title} no site da MDE Eventos e gostaria de um formato similar para o evento da minha empresa.`
   )}`;
 
   return (
@@ -25,7 +31,7 @@ export const CaseDetailModal: React.FC<CaseDetailModalProps> = ({
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 rounded-lg bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors z-10"
+          className="absolute top-4 right-4 p-2 rounded-lg bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors z-10 cursor-pointer"
           aria-label="Fechar modal"
         >
           <X className="w-5 h-5" />
@@ -81,7 +87,7 @@ export const CaseDetailModal: React.FC<CaseDetailModalProps> = ({
         <div className="space-y-3 mb-6">
           <h4 className="text-xs uppercase tracking-wider font-bold text-amber-400 flex items-center gap-1.5">
             <Award className="w-4 h-4" />
-            <span>Destaques da Produção e Entrega:</span>
+            <span>{language === 'en' ? 'Production & Delivery Highlights:' : language === 'es' ? 'Destaques de Producción y Entrega:' : 'Destaques da Produção e Entrega:'}</span>
           </h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
             {item.highlights.map((highlight, idx) => (
@@ -109,16 +115,16 @@ export const CaseDetailModal: React.FC<CaseDetailModalProps> = ({
         {/* Action Button */}
         <div className="pt-3 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="text-xs text-slate-400 text-center sm:text-left">
-            Deseja uma estrutura semelhante para sua empresa?
+            {language === 'en' ? 'Interested in a similar structure for your event?' : language === 'es' ? '¿Desea una estructura similar para su empresa?' : 'Deseja uma estrutura semelhante para sua empresa?'}
           </div>
           <a
             href={directWhatsAppUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm shadow-lg shadow-emerald-500/20 transition-all"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm shadow-lg shadow-emerald-500/20 transition-all cursor-pointer"
           >
             <MessageCircle className="w-4 h-4 fill-slate-950" />
-            <span>Quero um Evento Neste Formato</span>
+            <span>{language === 'en' ? 'Request This Format on WhatsApp' : language === 'es' ? 'Quiero un Evento en Este Formato' : 'Quero um Evento Neste Formato'}</span>
           </a>
         </div>
       </div>

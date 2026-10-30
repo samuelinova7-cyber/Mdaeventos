@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Sparkles, Star, MessageCircle, CheckCircle2, X } from 'lucide-react';
+import { Star, MessageCircle, CheckCircle2, X } from 'lucide-react';
 import { playNotificationSound, playButtonClick } from '../utils/audio';
+import { useLanguage } from '../context/LanguageContext';
 
 interface NotificationItem {
   id: string;
@@ -12,85 +13,142 @@ interface NotificationItem {
   rating?: number;
 }
 
-const SAMPLE_NOTIFICATIONS: NotificationItem[] = [
-  {
-    id: 'n1',
-    type: 'budget',
-    title: 'Novo Orçamento Solicitado!',
-    description: 'Dra. Tatiana (Hospital Regional de AL) solicitou proposta para Congresso de 350 pessoas.',
-    timeAgo: 'Há 4 minutos',
-    avatarText: 'TR',
-  },
-  {
-    id: 'n2',
-    type: 'review',
-    title: 'Nova Avaliação 5 Estrelas! ⭐⭐⭐⭐⭐',
-    description: '"Equipe incrível! O Conecta Contábil foi um marco no nosso setor."',
-    timeAgo: 'Há 12 minutos',
-    avatarText: 'CC',
-    rating: 5,
-  },
-  {
-    id: 'n3',
-    type: 'budget',
-    title: 'Orçamento Enviado via WhatsApp',
-    description: 'Grupo Empresarial de Maceió solicitou gestão para Workshop & Rodada de Negócios.',
-    timeAgo: 'Há 18 minutos',
-    avatarText: 'GE',
-  },
-  {
-    id: 'n4',
-    type: 'review',
-    title: 'Cliente Encantado! ⭐⭐⭐⭐⭐',
-    description: '"Credenciamento com QR Code sem nenhuma fila para 800 congressistas. Nota 10!"',
-    timeAgo: 'Há 25 minutos',
-    avatarText: 'MV',
-    rating: 5,
-  },
-  {
-    id: 'n5',
-    type: 'budget',
-    title: 'Nova Proposta em Andamento',
-    description: 'Associação Médica de Alagoas reservou data para Encontro Científico 2026/2027.',
-    timeAgo: 'Há 32 minutos',
-    avatarText: 'AM',
-  },
-];
-
 interface LiveNotificationToastsProps {
   onOpenBudget: () => void;
 }
 
 export const LiveNotificationToasts: React.FC<LiveNotificationToastsProps> = ({ onOpenBudget }) => {
+  const { language } = useLanguage();
   const [currentNotification, setCurrentNotification] = useState<NotificationItem | null>(null);
   const [isVisible, setIsVisible] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const getNotifications = (): NotificationItem[] => {
+    if (language === 'en') {
+      return [
+        {
+          id: 'n1',
+          type: 'budget',
+          title: 'New Quote Requested!',
+          description: 'Dr. Tatiana (Regional Health AL) requested a quote for a 350-delegate medical congress.',
+          timeAgo: '4 min ago',
+        },
+        {
+          id: 'n2',
+          type: 'review',
+          title: 'New 5-Star Review! ⭐⭐⭐⭐⭐',
+          description: '"Incredible team! Conecta Contábil was an absolute milestone for our industry."',
+          timeAgo: '12 min ago',
+          rating: 5,
+        },
+        {
+          id: 'n3',
+          type: 'budget',
+          title: 'Quote Sent via WhatsApp',
+          description: 'Corporate Group from Maceió requested 360° management for their annual leadership summit.',
+          timeAgo: '18 min ago',
+        },
+        {
+          id: 'n4',
+          type: 'review',
+          title: 'Delighted Client! ⭐⭐⭐⭐⭐',
+          description: '"Zero line QR code credentialing for 800 attendees. Flawless execution!"',
+          timeAgo: '25 min ago',
+          rating: 5,
+        },
+      ];
+    }
+
+    if (language === 'es') {
+      return [
+        {
+          id: 'n1',
+          type: 'budget',
+          title: '¡Nueva Cotización Solicitada!',
+          description: 'Dra. Tatiana (Hospital Regional AL) solicitó propuesta para congreso de 350 personas.',
+          timeAgo: 'Hace 4 min',
+        },
+        {
+          id: 'n2',
+          type: 'review',
+          title: '¡Nueva Opinión de 5 Estrellas! ⭐⭐⭐⭐⭐',
+          description: '"¡Equipo increíble! Conecta Contábil marcó un hito en nuestro sector."',
+          timeAgo: 'Hace 12 min',
+          rating: 5,
+        },
+        {
+          id: 'n3',
+          type: 'budget',
+          title: 'Presupuesto Enviado por WhatsApp',
+          description: 'Grupo Empresarial solicitó gestión 360° para taller y rueda de negocios.',
+          timeAgo: 'Hace 18 min',
+        },
+        {
+          id: 'n4',
+          type: 'review',
+          title: '¡Cliente Encantado! ⭐⭐⭐⭐⭐',
+          description: '"Acreditación QR sin ninguna fila para 800 congresistas. ¡Calificación 10!"',
+          timeAgo: 'Hace 25 min',
+          rating: 5,
+        },
+      ];
+    }
+
+    return [
+      {
+        id: 'n1',
+        type: 'budget',
+        title: 'Novo Orçamento Solicitado!',
+        description: 'Dra. Tatiana (Hospital Regional de AL) solicitou proposta para Congresso de 350 pessoas.',
+        timeAgo: 'Há 4 minutos',
+      },
+      {
+        id: 'n2',
+        type: 'review',
+        title: 'Nova Avaliação 5 Estrelas! ⭐⭐⭐⭐⭐',
+        description: '"Equipe incrível! O Conecta Contábil foi um marco no nosso setor."',
+        timeAgo: 'Há 12 minutos',
+        rating: 5,
+      },
+      {
+        id: 'n3',
+        type: 'budget',
+        title: 'Orçamento Enviado via WhatsApp',
+        description: 'Grupo Empresarial de Maceió solicitou gestão para Workshop & Rodada de Negócios.',
+        timeAgo: 'Há 18 minutos',
+      },
+      {
+        id: 'n4',
+        type: 'review',
+        title: 'Cliente Encantado! ⭐⭐⭐⭐⭐',
+        description: '"Credenciamento com QR Code sem nenhuma fila para 800 congressistas. Nota 10!"',
+        timeAgo: 'Há 25 minutos',
+        rating: 5,
+      },
+    ];
+  };
 
   useEffect(() => {
-    // Initial delay before first toast
+    const list = getNotifications();
     const initialTimer = setTimeout(() => {
-      showNextNotification(0);
+      showNextNotification(0, list);
     }, 4500);
 
     return () => clearTimeout(initialTimer);
-  }, []);
+  }, [language]);
 
-  const showNextNotification = (idx: number) => {
-    const nextItem = SAMPLE_NOTIFICATIONS[idx % SAMPLE_NOTIFICATIONS.length];
+  const showNextNotification = (idx: number, list: NotificationItem[]) => {
+    const nextItem = list[idx % list.length];
     setCurrentNotification(nextItem);
     setIsVisible(true);
     playNotificationSound();
 
-    // Auto hide after 6 seconds
     setTimeout(() => {
       setIsVisible(false);
     }, 6500);
 
-    // Schedule next notification in 14-18 seconds
-    const nextDelay = 14000 + Math.random() * 4000;
+    const nextDelay = 15000 + Math.random() * 4000;
     setTimeout(() => {
-      setCurrentIndex((prev) => prev + 1);
-      showNextNotification(idx + 1);
+      showNextNotification(idx + 1, list);
     }, nextDelay);
   };
 
@@ -111,7 +169,7 @@ export const LiveNotificationToasts: React.FC<LiveNotificationToastsProps> = ({ 
       onClick={handleClickToast}
       className="fixed bottom-6 left-6 z-50 max-w-sm sm:max-w-md cursor-pointer animate-in slide-in-from-bottom-5 fade-in duration-300"
     >
-      <div className="relative rounded-2xl bg-[#0e1424]/95 backdrop-blur-md border border-amber-500/35 p-4 shadow-2xl shadow-black/80 hover:border-amber-400 hover:scale-[1.02] transition-all group">
+      <div className="relative rounded-2xl bg-[#0e1424]/95 backdrop-blur-md border border-amber-500/35 p-4 shadow-2xl shadow-black/80 hover:border-amber-400 hover:scale-[1.02] transition-all group text-left">
         {/* Glow indicator */}
         <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-r from-amber-500/20 to-purple-600/20 blur opacity-75 group-hover:opacity-100 transition duration-300 -z-10" />
 
@@ -157,10 +215,12 @@ export const LiveNotificationToasts: React.FC<LiveNotificationToastsProps> = ({ 
             <div className="pt-1 flex items-center justify-between text-[11px] text-amber-300/90 font-medium">
               <span className="flex items-center gap-1">
                 <CheckCircle2 className="w-3 h-3 text-emerald-400" />
-                {currentNotification.type === 'budget' ? 'Atendimento Prioritário' : 'Avaliação Verificada'}
+                {currentNotification.type === 'budget'
+                  ? (language === 'en' ? 'VIP Priority Response' : language === 'es' ? 'Atención Prioritaria' : 'Atendimento Prioritário')
+                  : (language === 'en' ? 'Verified Review' : language === 'es' ? 'Opinión Verificada' : 'Avaliação Verificada')}
               </span>
               <span className="text-[10px] underline decoration-amber-400/50">
-                Clique para simular
+                {language === 'en' ? 'Click to quote' : language === 'es' ? 'Clic para cotizar' : 'Clique para simular'}
               </span>
             </div>
           </div>

@@ -3,6 +3,7 @@ import { Instagram, MessageCircle, MapPin, Sparkles, ArrowUp } from 'lucide-reac
 import { BRAND_INFO } from '../data/content';
 import { AnimatedRoundLogo } from './AnimatedRoundLogo';
 import { playButtonClick, playCoinSound } from '../utils/audio';
+import { useLanguage } from '../context/LanguageContext';
 
 interface FooterProps {
   onOpenBudget: () => void;
@@ -10,8 +11,14 @@ interface FooterProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({ onOpenBudget, whatsappPhone }) => {
+  const { t, language } = useLanguage();
+
   const directWhatsAppUrl = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(
-    'Olá, MDE Eventos! Gostaria de falar sobre a produção de um evento corporativo.'
+    language === 'en'
+      ? 'Hello, MDE Eventos! I would like to consult about corporate event production.'
+      : language === 'es'
+        ? '¡Hola, MDE Eventos! Deseo consultar sobre la producción de un evento corporativo.'
+        : 'Olá, MDE Eventos! Gostaria de falar sobre a produção de um evento corporativo.'
   )}`;
 
   const scrollToTop = () => {
@@ -38,16 +45,16 @@ export const Footer: React.FC<FooterProps> = ({ onOpenBudget, whatsappPhone }) =
                 </span>
                 <span className="text-xs text-amber-300 font-bold flex items-center gap-1.5 mt-0.5">
                   <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                  "Cada evento tem um propósito"
+                  {t('header.motto')}
                 </span>
                 <span className="text-[11px] text-slate-400">
-                  Planejamento e Produção de Eventos Corporativos e Institucionais
+                  {t('header.subtitle')}
                 </span>
               </div>
             </div>
 
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-sm">
-              Conectar pessoas, empresas e oportunidades, entendendo que cada evento tem um propósito único para comunicar, fortalecer relacionamentos e criar experiências duradouras.
+              {t('footer.description')}
             </p>
 
             <div className="flex items-center gap-3 pt-2">
@@ -78,7 +85,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenBudget, whatsappPhone }) =
           {/* Col 2: Navigation Links */}
           <div className="lg:col-span-3 space-y-3 text-left">
             <h4 className="text-xs uppercase tracking-wider font-bold text-white font-['Outfit']">
-              Navegação Direta
+              {t('footer.quickLinks')}
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
@@ -87,7 +94,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenBudget, whatsappPhone }) =
                   onClick={() => playButtonClick()}
                   className="hover:text-pink-300 transition-colors text-pink-400 font-semibold"
                 >
-                  Reels do Instagram (@mde.eventos)
+                  {t('nav.reels')} (@mde.eventos)
                 </a>
               </li>
               <li>
@@ -96,7 +103,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenBudget, whatsappPhone }) =
                   onClick={() => playButtonClick()}
                   className="hover:text-amber-300 transition-colors"
                 >
-                  Sócias & Liderança
+                  {t('nav.founders')}
                 </a>
               </li>
               <li>
@@ -105,7 +112,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenBudget, whatsappPhone }) =
                   onClick={() => playButtonClick()}
                   className="hover:text-amber-300 transition-colors"
                 >
-                  Soluções & Serviços
+                  {t('nav.solutions')}
                 </a>
               </li>
               <li>
@@ -114,7 +121,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenBudget, whatsappPhone }) =
                   onClick={() => playButtonClick()}
                   className="hover:text-amber-300 transition-colors"
                 >
-                  Cases & Conecta Contábil
+                  {t('nav.cases')}
                 </a>
               </li>
               <li>
@@ -123,7 +130,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenBudget, whatsappPhone }) =
                   onClick={() => playButtonClick()}
                   className="hover:text-amber-300 transition-colors"
                 >
-                  Avaliações de Clientes
+                  {t('nav.reviews')}
                 </a>
               </li>
               <li>
@@ -132,7 +139,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenBudget, whatsappPhone }) =
                   onClick={() => playButtonClick()}
                   className="hover:text-amber-300 transition-colors"
                 >
-                  Perguntas Frequentes
+                  {t('nav.faq')}
                 </a>
               </li>
             </ul>
@@ -141,12 +148,12 @@ export const Footer: React.FC<FooterProps> = ({ onOpenBudget, whatsappPhone }) =
           {/* Col 3: Contact & Location */}
           <div className="lg:col-span-4 space-y-3 text-left">
             <h4 className="text-xs uppercase tracking-wider font-bold text-white font-['Outfit']">
-              Atendimento & Contato
+              {t('footer.contact')}
             </h4>
             <div className="space-y-2.5 text-xs">
               <div className="flex items-center gap-2 text-slate-300">
                 <MapPin className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>{BRAND_INFO.address}</span>
+                <span>Maceió - Alagoas | Brasil</span>
               </div>
               <div className="flex items-center gap-2 text-slate-300">
                 <Instagram className="w-4 h-4 text-pink-400 shrink-0" />
@@ -169,7 +176,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenBudget, whatsappPhone }) =
                   onClick={() => playCoinSound()}
                   className="hover:underline hover:text-emerald-300 font-medium"
                 >
-                  Falar no WhatsApp com a Especialista
+                  WhatsApp VIP: +{whatsappPhone}
                 </a>
               </div>
             </div>
@@ -180,10 +187,10 @@ export const Footer: React.FC<FooterProps> = ({ onOpenBudget, whatsappPhone }) =
                   playCoinSound();
                   onOpenBudget();
                 }}
-                className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs shadow-md hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2"
+                className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs shadow-md hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
                 <Sparkles className="w-3.5 h-3.5 fill-slate-950" />
-                <span>Solicitar Proposta Comercial</span>
+                <span>{t('nav.cta')}</span>
               </button>
             </div>
           </div>
@@ -191,13 +198,13 @@ export const Footer: React.FC<FooterProps> = ({ onOpenBudget, whatsappPhone }) =
 
         {/* Bottom bar */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <p>© {new Date().getFullYear()} MDE Eventos. Todos os direitos reservados. Maceió - Alagoas e Brasil.</p>
+          <p>© {new Date().getFullYear()} MDE Eventos. {t('footer.rights')} Maceió - Alagoas e Brasil.</p>
 
           <button
             onClick={scrollToTop}
-            className="flex items-center gap-1.5 hover:text-amber-300 transition-colors"
+            className="flex items-center gap-1.5 hover:text-amber-300 transition-colors cursor-pointer"
           >
-            <span>Voltar ao topo</span>
+            <span>{language === 'en' ? 'Back to top' : language === 'es' ? 'Volver arriba' : 'Voltar ao topo'}</span>
             <ArrowUp className="w-3.5 h-3.5" />
           </button>
         </div>

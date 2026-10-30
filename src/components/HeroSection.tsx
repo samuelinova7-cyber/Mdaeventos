@@ -1,7 +1,9 @@
 import React from 'react';
-import { MessageCircle, Calculator, ShieldCheck, Award, Users, CheckCircle2, ArrowRight, Sparkles, MapPin } from 'lucide-react';
+import { MessageCircle, Calculator, ShieldCheck, Users, CheckCircle2, ArrowRight, MapPin } from 'lucide-react';
 import { AnimatedRoundLogo } from './AnimatedRoundLogo';
 import { playButtonClick, playCoinSound } from '../utils/audio';
+import { useTheme } from '../context/ThemeContext';
+import { useLanguage } from '../context/LanguageContext';
 
 interface HeroSectionProps {
   onOpenBudget: () => void;
@@ -9,22 +11,37 @@ interface HeroSectionProps {
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBudget, whatsappPhone }) => {
-  const directWhatsAppUrl = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(
-    'Olá! Vi a página da MDE Eventos e gostaria de conversar com a especialista sobre a organização do evento da minha empresa.'
-  )}`;
+  const { isDark } = useTheme();
+  const { t, language } = useLanguage();
+
+  const getDirectWhatsAppUrl = () => {
+    let msg = 'Olá! Vi a página da MDE Eventos e gostaria de conversar com a especialista sobre a organização do evento da minha empresa.';
+    if (language === 'en') {
+      msg = 'Hello! I saw the MDE Eventos website and would like to speak with a corporate specialist about organizing our company event.';
+    } else if (language === 'es') {
+      msg = '¡Hola! Vi la página de MDE Eventos y deseo hablar con la especialista sobre la organización del evento de mi empresa.';
+    }
+    return `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(msg)}`;
+  };
 
   return (
     <section
       id="hero"
-      className="relative min-h-[92vh] flex items-center justify-center pt-36 pb-16 overflow-hidden"
+      className="relative min-h-[92vh] flex items-center justify-center pt-36 pb-16 overflow-hidden transition-colors duration-300"
     >
       {/* Background Graphic Elements & Ambient Glow */}
-      <div className="absolute inset-0 bg-[#080B11]">
+      <div className={`absolute inset-0 transition-colors duration-300 ${isDark ? 'bg-[#080B11]' : 'bg-slate-50'}`}>
         {/* Subtle grid pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#1f293d0f_1px,transparent_1px),linear-gradient(to_bottom,#1f293d0f_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_40%,#000_70%,transparent_100%)]" />
-        
-        {/* Ambient Radial Lights (Gold & Royal Purple) */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[450px] bg-gradient-to-tr from-purple-900/25 via-amber-600/15 to-transparent blur-[120px] rounded-full pointer-events-none" />
+        <div
+          className={`absolute inset-0 bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_40%,#000_70%,transparent_100%)] ${
+            isDark
+              ? 'bg-[linear-gradient(to_right,#1f293d0f_1px,transparent_1px),linear-gradient(to_bottom,#1f293d0f_1px,transparent_1px)]'
+              : 'bg-[linear-gradient(to_right,#e2e8f080_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f080_1px,transparent_1px)]'
+          }`}
+        />
+
+        {/* Ambient Radial Lights */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[450px] bg-gradient-to-tr from-purple-900/15 via-amber-500/15 to-transparent blur-[120px] rounded-full pointer-events-none" />
         <div className="absolute -top-10 right-10 w-96 h-96 bg-amber-500/10 blur-[100px] rounded-full pointer-events-none" />
         <div className="absolute bottom-10 left-10 w-96 h-96 bg-purple-600/10 blur-[100px] rounded-full pointer-events-none" />
       </div>
@@ -33,45 +50,55 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBudget, whatsapp
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
           {/* Left Column: Copy & CTAs */}
           <div className="lg:col-span-7 flex flex-col items-start text-left space-y-6">
-            {/* Top Badge: Authority in Alagoas & Purpose */}
-            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-gradient-to-r from-amber-500/15 via-purple-500/15 to-amber-500/15 border border-amber-500/35 backdrop-blur-md">
-              <span className="flex h-2 w-2 rounded-full bg-amber-400 animate-pulse" />
-              <span className="text-xs font-bold text-amber-200 tracking-wide">
-                @mde.eventos • "Cada evento tem um propósito"
+            {/* Top Badge */}
+            <div className={`inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border backdrop-blur-md ${
+              isDark
+                ? 'bg-gradient-to-r from-amber-500/15 via-purple-500/15 to-amber-500/15 border-amber-500/35 text-amber-200'
+                : 'bg-amber-100/80 border-amber-400 text-amber-900 shadow-sm'
+            }`}>
+              <span className="flex h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
+              <span className="text-xs font-bold tracking-wide">
+                @mde.eventos • {t('header.motto')}
               </span>
             </div>
 
             {/* H1 Title */}
-            <h1 className="font-['Outfit'] text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.12]">
-              Transforme o Evento da sua Empresa em uma{' '}
-              <span className="bg-gradient-to-r from-amber-300 via-amber-200 to-amber-500 bg-clip-text text-transparent underline decoration-amber-500/40 decoration-wavy decoration-2">
-                Experiência Memorável
+            <h1
+              className={`font-['Outfit'] text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.12] ${
+                isDark ? 'text-white' : 'text-slate-950'
+              }`}
+            >
+              {t('hero.title.part1')}{' '}
+              <span className="bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600 dark:from-amber-300 dark:via-amber-200 dark:to-amber-500 bg-clip-text text-transparent underline decoration-amber-500/40 decoration-wavy decoration-2">
+                {t('hero.title.gradient')}
               </span>{' '}
-              e Estratégica.
+              {t('hero.title.part2')}
             </h1>
 
-            {/* Subtitle with Instagram Mission & Major Events */}
-            <p className="text-lg sm:text-xl text-slate-200 font-normal leading-relaxed max-w-2xl">
-              Conectamos pessoas, empresas e oportunidades. Planejamento e produção completa para congressos de grande porte com <strong>ingressos esgotados</strong> (como o <strong>3º Conecta Contábil</strong>), inovação educacional (<strong>EduConecta</strong>), rodas executivas (<strong>L.I.V.R.E. Talks</strong>) e celebrações institucionais de classe (<strong>Dia do Médico - CREMAL</strong>).
+            {/* Subtitle */}
+            <p className={`text-lg sm:text-xl font-normal leading-relaxed max-w-2xl ${
+              isDark ? 'text-slate-200' : 'text-slate-700'
+            }`}>
+              {t('hero.subtitle')}
             </p>
 
             {/* Feature Checkpoints */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1 w-full max-w-xl">
-              <div className="flex items-center gap-2 text-sm text-slate-300">
-                <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>Gestão 360° com Zero Imprevistos</span>
+              <div className={`flex items-center gap-2 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                <CheckCircle2 className="w-4 h-4 text-amber-500 shrink-0" />
+                <span>{t('hero.bullet1')}</span>
               </div>
-              <div className="flex items-center gap-2 text-sm text-slate-300">
-                <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>Integração Oficial & QR Code Sympla</span>
+              <div className={`flex items-center gap-2 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                <CheckCircle2 className="w-4 h-4 text-amber-500 shrink-0" />
+                <span>{t('hero.bullet2')}</span>
               </div>
-              <div className="flex items-center gap-2 text-sm text-slate-300">
-                <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>Captação Ativa de Patrocinadores</span>
+              <div className={`flex items-center gap-2 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                <CheckCircle2 className="w-4 h-4 text-amber-500 shrink-0" />
+                <span>{t('hero.bullet3')}</span>
               </div>
-              <div className="flex items-center gap-2 text-sm text-slate-300">
-                <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>Secretariado VIP & Cerimonial de Alta Performance</span>
+              <div className={`flex items-center gap-2 text-sm ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                <CheckCircle2 className="w-4 h-4 text-amber-500 shrink-0" />
+                <span>{t('proof.stat4.desc')}</span>
               </div>
             </div>
 
@@ -80,14 +107,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBudget, whatsapp
               {/* Primary WhatsApp CTA Button */}
               <a
                 id="hero-cta-whatsapp"
-                href={directWhatsAppUrl}
+                href={getDirectWhatsAppUrl()}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => playCoinSound()}
-                className="inline-flex items-center justify-center gap-3 px-7 py-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-base shadow-xl shadow-emerald-500/25 hover:shadow-emerald-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 group"
+                className="inline-flex items-center justify-center gap-3 px-7 py-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-base shadow-xl shadow-emerald-600/25 hover:shadow-emerald-600/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 group"
               >
-                <MessageCircle className="w-5 h-5 fill-slate-950 group-hover:rotate-12 transition-transform" />
-                <span>Falar com a Especialista no WhatsApp</span>
+                <MessageCircle className="w-5 h-5 fill-white group-hover:rotate-12 transition-transform" />
+                <span>{t('hero.cta.primary')}</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </a>
 
@@ -98,33 +125,41 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBudget, whatsapp
                   playButtonClick();
                   onOpenBudget();
                 }}
-                className="inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-slate-200 hover:text-white font-semibold text-base border border-amber-500/30 hover:border-amber-500/60 shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all"
+                className={`inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-xl font-semibold text-base border shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer ${
+                  isDark
+                    ? 'bg-slate-900/90 hover:bg-slate-800 text-slate-200 hover:text-white border-amber-500/30 hover:border-amber-500/60'
+                    : 'bg-white hover:bg-slate-50 text-slate-900 border-slate-300 hover:border-amber-400 shadow-slate-200/80'
+                }`}
               >
-                <Calculator className="w-5 h-5 text-amber-400" />
-                <span>Simular Orçamento Rápido</span>
+                <Calculator className="w-5 h-5 text-amber-500" />
+                <span>{t('hero.cta.secondary')}</span>
               </button>
             </div>
 
             {/* Micro Social Trust Bar */}
-            <div className="flex items-center gap-4 pt-2 text-xs text-slate-400">
+            <div className={`flex items-center gap-4 pt-2 text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
               <div className="flex items-center gap-1.5">
-                <MapPin className="w-3.5 h-3.5 text-amber-400" />
-                <span>Maceió & todo Alagoas</span>
+                <MapPin className="w-3.5 h-3.5 text-amber-500" />
+                <span>Maceió & Alagoas • Brasil</span>
               </div>
-              <span className="text-slate-700">•</span>
+              <span className={isDark ? 'text-slate-700' : 'text-slate-300'}>•</span>
               <div className="flex items-center gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Empresa Certificada & CNPJ Ativo</span>
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+                <span>{t('hero.leadBadge')}</span>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Visual Stage / Highlight Card with Round Animated Logo */}
+          {/* Right Column: Visual Stage / Highlight Card with Single Round Animated Logo */}
           <div className="lg:col-span-5 relative">
             {/* Background layered glow */}
             <div className="absolute -inset-1.5 bg-gradient-to-r from-amber-500/40 via-purple-600/30 to-amber-600/40 rounded-3xl blur-xl opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
 
-            <div className="relative rounded-2xl bg-[#0c101c] border border-slate-800/90 shadow-2xl overflow-hidden">
+            <div
+              className={`relative rounded-2xl border shadow-2xl overflow-hidden transition-colors ${
+                isDark ? 'bg-[#0c101c] border-slate-800/90' : 'bg-white border-slate-200'
+              }`}
+            >
               {/* Media Container with Real Corporate Event Visual */}
               <div className="relative h-72 sm:h-80 w-full overflow-hidden">
                 <img
@@ -133,7 +168,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBudget, whatsapp
                   referrerPolicy="no-referrer"
                   className="w-full h-full object-cover object-center scale-105 hover:scale-100 transition-transform duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0c101c] via-[#0c101c]/40 to-transparent" />
+                <div
+                  className={`absolute inset-0 bg-gradient-to-t ${
+                    isDark ? 'from-[#0c101c] via-[#0c101c]/40 to-transparent' : 'from-black/70 via-black/20 to-transparent'
+                  }`}
+                />
 
                 {/* Round Animated Logo floating badge in top left */}
                 <div className="absolute top-4 left-4 z-20 flex items-center gap-2 bg-black/75 backdrop-blur-md p-1.5 pr-3.5 rounded-full border border-amber-500/40">
@@ -155,33 +194,33 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBudget, whatsapp
               <div className="p-6 space-y-4 text-left">
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <h3 className="font-['Outfit'] text-lg font-bold text-white">
+                    <h3 className={`font-['Outfit'] text-lg font-bold ${isDark ? 'text-white' : 'text-slate-950'}`}>
                       Conecta Contábil: O Maior Encontro de Negócios de AL
                     </h3>
-                    <p className="text-xs text-slate-300 mt-1 leading-relaxed">
+                    <p className={`text-xs mt-1 leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
                       Edições consolidadas de grande porte com ingressos 100% esgotados, feira de patrocinadores e networking qualificado.
                     </p>
                   </div>
-                  <span className="shrink-0 text-xs font-bold px-2 py-1 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">
-                    Ingressos Esgotados
+                  <span className="shrink-0 text-xs font-bold px-2 py-1 rounded bg-amber-500/20 text-amber-500 dark:text-amber-300 border border-amber-500/40">
+                    Sold Out
                   </span>
                 </div>
 
                 {/* Highlights mini grid */}
-                <div className="grid grid-cols-2 gap-2 pt-1 border-t border-slate-800/80">
-                  <div className="bg-slate-900/60 rounded-lg p-2.5 border border-slate-800">
-                    <span className="text-[10px] uppercase font-bold text-amber-400 block">
-                      Credenciamento
+                <div className={`grid grid-cols-2 gap-2 pt-1 border-t ${isDark ? 'border-slate-800/80' : 'border-slate-100'}`}>
+                  <div className={`rounded-lg p-2.5 border ${isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
+                    <span className="text-[10px] uppercase font-bold text-amber-500 block">
+                      Check-in
                     </span>
-                    <span className="text-xs font-semibold text-slate-200">
+                    <span className={`text-xs font-semibold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
                       Sympla + QR Code 100%
                     </span>
                   </div>
-                  <div className="bg-slate-900/60 rounded-lg p-2.5 border border-slate-800">
-                    <span className="text-[10px] uppercase font-bold text-purple-400 block">
-                      Local
+                  <div className={`rounded-lg p-2.5 border ${isDark ? 'bg-slate-900/60 border-slate-800' : 'bg-slate-50 border-slate-200'}`}>
+                    <span className="text-[10px] uppercase font-bold text-purple-500 block">
+                      Venue
                     </span>
-                    <span className="text-xs font-semibold text-slate-200">
+                    <span className={`text-xs font-semibold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
                       Centro de Convenções AL
                     </span>
                   </div>

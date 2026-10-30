@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { MessageCircle, X, Send, Sparkles } from 'lucide-react';
+import { MessageCircle, X, Sparkles } from 'lucide-react';
 import { playButtonClick, playCoinSound, playPowerUpSound } from '../utils/audio';
+import { useLanguage } from '../context/LanguageContext';
 
 interface FloatingWhatsAppProps {
   whatsappPhone: string;
@@ -12,9 +13,18 @@ export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({
   onOpenBudget,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [quickMsg, setQuickMsg] = useState('Olá! Gostaria de um orçamento para um evento corporativo em Alagoas.');
+  const { t, language } = useLanguage();
 
-  const officialLogoUrl = 'https://res.cloudinary.com/hd1sahto/image/upload/v1793395580/WhatsApp_Image_2026-10-30_at_4.25.30_PM.jpg';
+  const getDefaultMsg = () => {
+    if (language === 'en') return 'Hello! I would like to request a quote for our upcoming corporate event in Brazil.';
+    if (language === 'es') return '¡Hola! Quisiera cotizar un evento corporativo con MDE Eventos.';
+    return 'Olá! Gostaria de um orçamento para um evento corporativo em Alagoas.';
+  };
+
+  const [quickMsg, setQuickMsg] = useState(getDefaultMsg());
+
+  const officialLogoUrl =
+    'https://res.cloudinary.com/hd1sahto/image/upload/v1793395580/WhatsApp_Image_2026-10-30_at_4.25.30_PM.jpg';
 
   const handleToggle = () => {
     playButtonClick();
@@ -49,7 +59,7 @@ export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({
                 <div className="font-bold text-sm">MDE Eventos</div>
                 <div className="text-[11px] text-emerald-100 flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-pulse" />
-                  Especialista em Eventos AL
+                  {language === 'en' ? 'Event Specialist AL & BR' : language === 'es' ? 'Especialista en Eventos' : 'Especialista em Eventos AL'}
                 </div>
               </div>
             </div>
@@ -58,7 +68,7 @@ export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({
                 playButtonClick();
                 setIsOpen(false);
               }}
-              className="p-1.5 rounded-lg text-emerald-100 hover:text-white hover:bg-emerald-800/60"
+              className="p-1.5 rounded-lg text-emerald-100 hover:text-white hover:bg-emerald-800/60 cursor-pointer"
               aria-label="Fechar chat"
             >
               <X className="w-5 h-5" />
@@ -68,8 +78,12 @@ export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({
           {/* Chat Body */}
           <div className="p-4 bg-[#090d16] space-y-3">
             <div className="bg-slate-900 border border-slate-800 p-3 rounded-xl rounded-tl-none text-xs text-slate-200 shadow-sm leading-relaxed">
-              <p className="font-semibold text-amber-400 mb-1">Equipe MDE Eventos:</p>
-              Olá! Tudo bem? Como podemos ajudar a transformar o evento da sua empresa em Alagoas em um case de sucesso?
+              <p className="font-semibold text-amber-400 mb-1">MDE Eventos:</p>
+              {language === 'en'
+                ? 'Hello! How can we help transform your upcoming corporate event into an unforgettable success?'
+                : language === 'es'
+                  ? '¡Hola! ¿Cómo podemos ayudarle a convertir su próximo evento corporativo en un éxito absoluto?'
+                  : 'Olá! Tudo bem? Como podemos ajudar a transformar o evento da sua empresa em Alagoas em um case de sucesso?'}
             </div>
 
             {/* Fast Budget Action Pill */}
@@ -79,10 +93,10 @@ export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({
                 setIsOpen(false);
                 onOpenBudget();
               }}
-              className="w-full flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-300 text-xs font-bold transition-all"
+              className="w-full flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-300 text-xs font-bold transition-all cursor-pointer"
             >
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Simular Orçamento Completo</span>
+              <span>{t('hero.cta.secondary')}</span>
             </button>
 
             {/* Direct Message Form */}
@@ -91,15 +105,15 @@ export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({
                 rows={2}
                 value={quickMsg}
                 onChange={(e) => setQuickMsg(e.target.value)}
-                placeholder="Digite sua mensagem..."
+                placeholder={language === 'en' ? 'Type your message...' : language === 'es' ? 'Escriba su mensaje...' : 'Digite sua mensagem...'}
                 className="w-full p-2.5 rounded-lg bg-slate-950 border border-slate-700 text-white text-xs outline-none focus:border-emerald-400 resize-none"
               />
               <button
                 type="submit"
-                className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-md transition-colors"
+                className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-md transition-colors cursor-pointer"
               >
                 <MessageCircle className="w-4 h-4 fill-slate-950" />
-                <span>Iniciar Conversa no WhatsApp</span>
+                <span>{language === 'en' ? 'Chat on WhatsApp' : language === 'es' ? 'Conversar en WhatsApp' : 'Iniciar Conversa no WhatsApp'}</span>
               </button>
             </form>
           </div>
@@ -111,7 +125,7 @@ export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({
         id="btn-floating-whatsapp"
         onClick={handleToggle}
         aria-label="Abrir WhatsApp"
-        className="relative group flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-2xl shadow-emerald-500/40 hover:scale-105 active:scale-95 transition-all duration-300"
+        className="relative group flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-2xl shadow-emerald-500/40 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer"
       >
         <span className="absolute -inset-1 rounded-full bg-emerald-400 opacity-40 animate-ping pointer-events-none" />
 
