@@ -1,6 +1,7 @@
 import React from 'react';
 import { MessageCircle, Calculator, ShieldCheck, Award, Users, CheckCircle2, ArrowRight, Sparkles, MapPin } from 'lucide-react';
-import { BRAND_INFO } from '../data/content';
+import { AnimatedRoundLogo } from './AnimatedRoundLogo';
+import { playButtonClick, playCoinSound } from '../utils/audio';
 
 interface HeroSectionProps {
   onOpenBudget: () => void;
@@ -15,7 +16,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBudget, whatsapp
   return (
     <section
       id="hero"
-      className="relative min-h-[92vh] flex items-center justify-center pt-28 pb-16 overflow-hidden"
+      className="relative min-h-[92vh] flex items-center justify-center pt-36 pb-16 overflow-hidden"
     >
       {/* Background Graphic Elements & Ambient Glow */}
       <div className="absolute inset-0 bg-[#080B11]">
@@ -32,11 +33,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBudget, whatsapp
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
           {/* Left Column: Copy & CTAs */}
           <div className="lg:col-span-7 flex flex-col items-start text-left space-y-6">
-            {/* Top Badge: Authority in Alagoas */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500/15 to-purple-500/15 border border-amber-500/30 backdrop-blur-md">
+            {/* Top Badge: Authority in Alagoas & Purpose */}
+            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-gradient-to-r from-amber-500/15 via-purple-500/15 to-amber-500/15 border border-amber-500/35 backdrop-blur-md">
               <span className="flex h-2 w-2 rounded-full bg-amber-400 animate-pulse" />
-              <span className="text-xs font-semibold text-amber-200 tracking-wide">
-                Referência em Produção de Eventos Corporativos em Alagoas
+              <span className="text-xs font-bold text-amber-200 tracking-wide">
+                @mde.eventos • "Cada evento tem um propósito"
               </span>
             </div>
 
@@ -49,20 +50,20 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBudget, whatsapp
               e Estratégica.
             </h1>
 
-            {/* Subtitle */}
-            <p className="text-lg sm:text-xl text-slate-300 font-normal leading-relaxed max-w-2xl">
-              Organização, planejamento e execução completa de eventos corporativos, congressos, feiras e encontros empresariais em Alagoas com gestão 360° e zero dor de cabeça.
+            {/* Subtitle with Instagram Mission & Major Events */}
+            <p className="text-lg sm:text-xl text-slate-200 font-normal leading-relaxed max-w-2xl">
+              Conectamos pessoas, empresas e oportunidades. Planejamento e produção completa para congressos de grande porte com <strong>ingressos esgotados</strong> (como o <strong>3º Conecta Contábil</strong>), inovação educacional (<strong>EduConecta</strong>), rodas executivas (<strong>L.I.V.R.E. Talks</strong>) e celebrações institucionais de classe (<strong>Dia do Médico - CREMAL</strong>).
             </p>
 
             {/* Feature Checkpoints */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1 w-full max-w-xl">
               <div className="flex items-center gap-2 text-sm text-slate-300">
                 <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>Gestão Completa de Ponta a Ponta</span>
+                <span>Gestão 360° com Zero Imprevistos</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-slate-300">
                 <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>Integração e Credenciamento Sympla</span>
+                <span>Integração Oficial & QR Code Sympla</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-slate-300">
                 <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
@@ -70,7 +71,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBudget, whatsapp
               </div>
               <div className="flex items-center gap-2 text-sm text-slate-300">
                 <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
-                <span>Fornecedores Homologados & Nota Fiscal</span>
+                <span>Secretariado VIP & Cerimonial de Alta Performance</span>
               </div>
             </div>
 
@@ -82,6 +83,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBudget, whatsapp
                 href={directWhatsAppUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => playCoinSound()}
                 className="inline-flex items-center justify-center gap-3 px-7 py-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-base shadow-xl shadow-emerald-500/25 hover:shadow-emerald-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 group"
               >
                 <MessageCircle className="w-5 h-5 fill-slate-950 group-hover:rotate-12 transition-transform" />
@@ -92,8 +94,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBudget, whatsapp
               {/* Secondary Fast Budget CTA */}
               <button
                 id="hero-cta-orcamento"
-                onClick={onOpenBudget}
-                className="inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-slate-200 hover:text-white font-semibold text-base border border-amber-500/30 hover:border-amber-500/60 shadow-lg transition-all"
+                onClick={() => {
+                  playButtonClick();
+                  onOpenBudget();
+                }}
+                className="inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-slate-200 hover:text-white font-semibold text-base border border-amber-500/30 hover:border-amber-500/60 shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all"
               >
                 <Calculator className="w-5 h-5 text-amber-400" />
                 <span>Simular Orçamento Rápido</span>
@@ -114,7 +119,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBudget, whatsapp
             </div>
           </div>
 
-          {/* Right Column: Visual Stage / Highlight Card (Conecta Contábil & EduConecta showcase) */}
+          {/* Right Column: Visual Stage / Highlight Card with Round Animated Logo */}
           <div className="lg:col-span-5 relative">
             {/* Background layered glow */}
             <div className="absolute -inset-1.5 bg-gradient-to-r from-amber-500/40 via-purple-600/30 to-amber-600/40 rounded-3xl blur-xl opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
@@ -130,10 +135,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBudget, whatsapp
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0c101c] via-[#0c101c]/40 to-transparent" />
 
-                {/* Case Badge Tag on Image */}
-                <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-950/80 backdrop-blur-md border border-amber-500/40 text-amber-300 text-xs font-bold">
-                  <Award className="w-3.5 h-3.5 text-amber-400" />
-                  <span>Case: 3º Conecta Contábil Alagoas</span>
+                {/* Round Animated Logo floating badge in top left */}
+                <div className="absolute top-4 left-4 z-20 flex items-center gap-2 bg-black/75 backdrop-blur-md p-1.5 pr-3.5 rounded-full border border-amber-500/40">
+                  <AnimatedRoundLogo size="md" onClick={() => playCoinSound()} />
+                  <div className="flex flex-col text-left">
+                    <span className="text-[11px] font-black text-white">MDE Eventos</span>
+                    <span className="text-[9px] text-amber-300 font-bold uppercase">Sold-Out Alagoas</span>
+                  </div>
                 </div>
 
                 {/* Live Attendee Pill */}
@@ -144,18 +152,18 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenBudget, whatsapp
               </div>
 
               {/* Lower Info Box */}
-              <div className="p-6 space-y-4">
+              <div className="p-6 space-y-4 text-left">
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <h3 className="font-['Outfit'] text-lg font-bold text-white">
-                      Produção de Grande Porte com Alto Impacto
+                      Conecta Contábil: O Maior Encontro de Negócios de AL
                     </h3>
-                    <p className="text-xs text-slate-400 mt-0.5">
-                      Palcos de alta tecnologia, credenciamento sem filas e captação de marcas parceiras.
+                    <p className="text-xs text-slate-300 mt-1 leading-relaxed">
+                      Edições consolidadas de grande porte com ingressos 100% esgotados, feira de patrocinadores e networking qualificado.
                     </p>
                   </div>
-                  <span className="shrink-0 text-xs font-bold px-2 py-1 rounded bg-purple-950/80 text-purple-300 border border-purple-800/60">
-                    Case de Sucesso
+                  <span className="shrink-0 text-xs font-bold px-2 py-1 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                    Ingressos Esgotados
                   </span>
                 </div>
 

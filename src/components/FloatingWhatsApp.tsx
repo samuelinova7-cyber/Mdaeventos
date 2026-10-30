@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { MessageCircle, X, Send, Sparkles, CheckCircle2 } from 'lucide-react';
-import { BRAND_INFO } from '../data/content';
+import { MessageCircle, X, Send, Sparkles } from 'lucide-react';
+import { playButtonClick, playCoinSound, playPowerUpSound } from '../utils/audio';
 
 interface FloatingWhatsAppProps {
   whatsappPhone: string;
@@ -14,8 +14,16 @@ export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [quickMsg, setQuickMsg] = useState('Olá! Gostaria de um orçamento para um evento corporativo em Alagoas.');
 
+  const officialLogoUrl = 'https://res.cloudinary.com/hd1sahto/image/upload/v1793395580/WhatsApp_Image_2026-10-30_at_4.25.30_PM.jpg';
+
+  const handleToggle = () => {
+    playButtonClick();
+    setIsOpen(!isOpen);
+  };
+
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
+    playPowerUpSound();
     const url = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(quickMsg)}`;
     window.open(url, '_blank', 'noopener,noreferrer');
   };
@@ -24,12 +32,17 @@ export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
       {/* Popover Window */}
       {isOpen && (
-        <div className="mb-3 w-80 sm:w-96 rounded-2xl bg-[#0e1422] border border-emerald-500/30 shadow-2xl shadow-black/80 overflow-hidden animate-in slide-in-from-bottom-5 duration-200">
+        <div className="mb-3 w-80 sm:w-96 rounded-2xl bg-[#0e1422] border border-emerald-500/30 shadow-2xl shadow-black/80 overflow-hidden animate-in slide-in-from-bottom-5 duration-200 text-left">
           {/* Header */}
           <div className="bg-gradient-to-r from-emerald-700 to-emerald-900 p-4 text-white flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="relative w-10 h-10 rounded-full bg-slate-950 p-[1px] flex items-center justify-center">
-                <span className="font-['Outfit'] font-black text-xs text-amber-300">MDE</span>
+              <div className="relative w-10 h-10 rounded-full overflow-hidden border border-amber-400">
+                <img
+                  src={officialLogoUrl}
+                  alt="MDE Eventos Logo"
+                  referrerPolicy="no-referrer"
+                  className="w-full h-full object-cover"
+                />
                 <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-[#0e1422]" />
               </div>
               <div>
@@ -41,7 +54,10 @@ export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({
               </div>
             </div>
             <button
-              onClick={() => setIsOpen(false)}
+              onClick={() => {
+                playButtonClick();
+                setIsOpen(false);
+              }}
               className="p-1.5 rounded-lg text-emerald-100 hover:text-white hover:bg-emerald-800/60"
               aria-label="Fechar chat"
             >
@@ -53,12 +69,13 @@ export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({
           <div className="p-4 bg-[#090d16] space-y-3">
             <div className="bg-slate-900 border border-slate-800 p-3 rounded-xl rounded-tl-none text-xs text-slate-200 shadow-sm leading-relaxed">
               <p className="font-semibold text-amber-400 mb-1">Equipe MDE Eventos:</p>
-              Olá! Tudo bem? Como podemos ajudar a transformar o evento da sua empresa em Alagoas?
+              Olá! Tudo bem? Como podemos ajudar a transformar o evento da sua empresa em Alagoas em um case de sucesso?
             </div>
 
             {/* Fast Budget Action Pill */}
             <button
               onClick={() => {
+                playCoinSound();
                 setIsOpen(false);
                 onOpenBudget();
               }}
@@ -92,11 +109,10 @@ export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({
       {/* Main Trigger Floating Button */}
       <button
         id="btn-floating-whatsapp"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={handleToggle}
         aria-label="Abrir WhatsApp"
         className="relative group flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow-2xl shadow-emerald-500/40 hover:scale-105 active:scale-95 transition-all duration-300"
       >
-        {/* Pulsing ring */}
         <span className="absolute -inset-1 rounded-full bg-emerald-400 opacity-40 animate-ping pointer-events-none" />
 
         {isOpen ? (
@@ -105,7 +121,6 @@ export const FloatingWhatsApp: React.FC<FloatingWhatsAppProps> = ({
           <MessageCircle className="w-7 h-7 fill-slate-950 text-slate-950 group-hover:rotate-12 transition-transform" />
         )}
 
-        {/* Small notification badge */}
         {!isOpen && (
           <span className="absolute top-0 right-0 flex h-4 w-4">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />

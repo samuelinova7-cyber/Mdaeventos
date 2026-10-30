@@ -3,6 +3,7 @@ import { PORTFOLIO_CASES } from '../data/content';
 import { PortfolioCase } from '../types';
 import { CaseDetailModal } from './CaseDetailModal';
 import { Sparkles, MapPin, Users, ArrowUpRight, Award, Camera } from 'lucide-react';
+import { playButtonClick, playCoinSound } from '../utils/audio';
 
 interface PortfolioSectionProps {
   whatsappPhone: string;
@@ -24,7 +25,7 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ whatsappPhon
   });
 
   return (
-    <section id="cases" className="relative py-20 bg-[#0a0e19]">
+    <section id="cases" className="relative py-20 bg-[#0a0e19] border-t border-amber-500/10">
       {/* Glow backgrounds */}
       <div className="absolute top-1/4 right-0 w-96 h-96 bg-purple-900/10 blur-[130px] pointer-events-none" />
       <div className="absolute bottom-10 left-10 w-96 h-96 bg-amber-500/10 blur-[130px] pointer-events-none" />
@@ -50,7 +51,10 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ whatsappPhon
             {categories.map((cat) => (
               <button
                 key={cat}
-                onClick={() => setActiveFilter(cat)}
+                onClick={() => {
+                  playButtonClick();
+                  setActiveFilter(cat);
+                }}
                 className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                   activeFilter === cat
                     ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20 font-bold'
@@ -68,7 +72,10 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ whatsappPhon
           {filteredCases.map((item) => (
             <div
               key={item.id}
-              onClick={() => setSelectedCase(item)}
+              onClick={() => {
+                playCoinSound();
+                setSelectedCase(item);
+              }}
               className="group cursor-pointer rounded-2xl bg-[#0f1424] border border-slate-800/80 hover:border-amber-500/50 overflow-hidden shadow-xl hover:shadow-2xl hover:shadow-black/70 transition-all duration-300 flex flex-col"
             >
               {/* Image Container with Zoom & Gradient */}
@@ -100,7 +107,7 @@ export const PortfolioSection: React.FC<PortfolioSectionProps> = ({ whatsappPhon
               </div>
 
               {/* Card Body */}
-              <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
+              <div className="p-6 flex-1 flex flex-col justify-between space-y-4 text-left">
                 <div>
                   <div className="flex items-center gap-2 text-xs text-amber-400 font-medium mb-1.5">
                     <MapPin className="w-3.5 h-3.5 shrink-0" />

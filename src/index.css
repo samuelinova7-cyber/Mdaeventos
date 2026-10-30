@@ -1,1 +1,95 @@
 @import "tailwindcss";
+
+@layer utilities {
+  @keyframes marquee {
+    0% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes pulseGlow {
+    0%, 100% {
+      filter: drop-shadow(0 0 16px rgba(245, 158, 11, 0.5)) drop-shadow(0 0 32px rgba(168, 85, 247, 0.4));
+    }
+    50% {
+      filter: drop-shadow(0 0 30px rgba(245, 158, 11, 0.95)) drop-shadow(0 0 55px rgba(217, 119, 6, 0.65));
+    }
+  }
+
+  @keyframes spinSlow {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes logoFloat {
+    0%, 100% {
+      transform: translateY(0px) scale(1);
+    }
+    50% {
+      transform: translateY(-4px) scale(1.03);
+    }
+  }
+
+  @keyframes shineSweep {
+    0% {
+      transform: rotate(25deg) translateY(-140%);
+    }
+    40%, 100% {
+      transform: rotate(25deg) translateY(140%);
+    }
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 28s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+.logo-glow {
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spinSlow 8s linear infinite;
+}
+
+.animate-logo-float {
+  animation: logoFloat 4s ease-in-out infinite;
+}
+
+.image-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.image-shine::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    60deg,
+    rgba(255, 255, 255, 0) 20%,
+    rgba(255, 215, 0, 0.35) 45%,
+    rgba(255, 255, 255, 0.6) 50%,
+    rgba(255, 215, 0, 0.35) 55%,
+    rgba(255, 255, 255, 0) 80%
+  );
+  transform: rotate(25deg) translateY(-100%);
+  animation: shineSweep 4s ease-in-out infinite;
+  pointer-events: none;
+}
